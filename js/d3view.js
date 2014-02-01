@@ -151,7 +151,13 @@ function selectNode(d, nodeDOMObject) {
     	.style("font-size",SELECTED_FONT_SIZE)
     	.style("fill","#222")
     	.style("stroke", "#222");
-    node.classed("node_selected", function(d) {
+    d.prereqIndices.forEach(function(n){
+      node[0][n].classList.add("prereqNode");
+    });
+    d.postreqIndices.forEach(function(n){
+      node[0][n].classList.add("postreqNode");
+    });
+    node.classed("nodeSelected", function(d) {
       return d === selectedNodeObj; });
   }
 }
@@ -166,9 +172,11 @@ function deselect() {
     .style("font-size",DESELECTED_FONT_SIZE)
     .style("fill", "#cccccc")
     .style("stroke","none");
-  node.classed("node_selected", function(d) {
+  node.classed("nodeSelected", function(d) {
     return d === selectedNodeObj; });
   selectedNodeObj = null;
   selectedNodeDOMObject = null;
-  node.classed("node_selected", false);
+  node.classed("nodeSelected", false);
+  node.classed("prereqNode", false);
+  node.classed("postreqNode", false);
 }
