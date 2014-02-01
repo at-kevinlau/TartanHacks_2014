@@ -8,6 +8,7 @@ var WIDTH = window.innerWidth,
     SELECTED_DX = 24,
     DESELECTED_DX = 12,
     SELECTED_FONT_SIZE = "18px",
+    SELECTED_MED_FONT_SIZE = "10px",
     DESELECTED_FONT_SIZE = "5px",
     DESELECTED_TEXT_Y = ".35em",
     fill = d3.scale.category20();
@@ -43,7 +44,7 @@ var vis = outer
  	//special transform...
  	.attr("transform", "translate(" + WIDTH / 2 + "," + HEIGHT / 2 + ")")
     .call(d3.behavior.zoom()
-    .scaleExtent([.5,10])	//limits zooming
+    .scaleExtent([.5,4])	//limits zooming
     .on("zoom", rescale))
     .on("dblclick.zoom", null)
   	.append('svg:g');
@@ -94,7 +95,7 @@ node.append("text")
       {
         return d.courseId;
       } else {
-        return (d.treeType === "AND") ? "\u00a0\u00a0AND" : "\u00a0\u00a0\u00a0OR";
+        return (d.treeType === "AND") ? "\u00a0AND" : "\u00a0\u00a0\u00a0OR";
       }
     })
 
@@ -170,9 +171,27 @@ function selectNode(d, nodeDOMObject) {
     link.classed("lowOpacity", true);
     d.prereqIndices.forEach(function(n){
       node[0][n].classList.add("prereqNode");
+      d3.select(node[0][n]).select("circle").transition()
+        .duration(750)
+        .attr("r", SELECTED_RADIUS * .6);
+      d3.select(node[0][n]).select("text").transition()
+    	.duration(750)
+    	.attr("dx",-.5*SELECTED_RADIUS)
+    	.style("font-size",SELECTED_MED_FONT_SIZE)
+    	.style("fill","#FFF")
+    	.style("stroke", "none");
       if (nodes[n].courseId.length <= 0) {
         nodes[n].prereqIndices.forEach(function(z){
           node[0][z].classList.add("prereqNode");
+        d3.select(node[0][z]).select("circle").transition()
+          .duration(750)
+          .attr("r", SELECTED_RADIUS * .6);
+        d3.select(node[0][z]).select("text").transition()
+      	.duration(750)
+    	  .attr("dx",-.5*SELECTED_RADIUS)
+    	  .style("font-size",SELECTED_MED_FONT_SIZE)
+    	  .style("fill","#FFF")
+    	  .style("stroke", "none");
         });
       }
     });
@@ -187,9 +206,27 @@ function selectNode(d, nodeDOMObject) {
     });
     d.postreqIndices.forEach(function(n){
       node[0][n].classList.add("postreqNode");
+      d3.select(node[0][n]).select("circle").transition()
+        .duration(750)
+        .attr("r", SELECTED_RADIUS * .6);
+      d3.select(node[0][n]).select("text").transition()
+    	.duration(750)
+    	.attr("dx",-.5*SELECTED_RADIUS)
+    	.style("font-size",SELECTED_MED_FONT_SIZE)
+    	.style("fill","#FFF")
+    	.style("stroke", "none");
       if (nodes[n].courseId.length <= 0) {
         nodes[n].postreqIndices.forEach(function(z){
           node[0][z].classList.add("postreqNode");
+        d3.select(node[0][z]).select("circle").transition()
+          .duration(750)
+          .attr("r", SELECTED_RADIUS * .6);
+        d3.select(node[0][z]).select("text").transition()
+    	  .duration(750)
+    	  .attr("dx",-.5*SELECTED_RADIUS)
+    	  .style("font-size",SELECTED_MED_FONT_SIZE)
+    	  .style("fill","#FFF")
+    	  .style("stroke", "none");
         });
       }
     });
