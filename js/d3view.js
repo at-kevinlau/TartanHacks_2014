@@ -170,7 +170,7 @@ function deselect() {
     .duration(750)
     .attr("dx",-.75*DESELECTED_RADIUS)
     .style("font-size",DESELECTED_FONT_SIZE)
-    .style("fill", "#cccccc")
+    .style("fill", "#FFF")
     .style("stroke","none");
   node.classed("nodeSelected", function(d) {
     return d === selectedNodeObj; });
