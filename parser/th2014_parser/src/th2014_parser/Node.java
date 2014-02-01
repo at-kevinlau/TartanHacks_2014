@@ -1,5 +1,9 @@
 package th2014_parser;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +22,6 @@ public class Node
 	TreeType treeType;
 	// UUID postreqUUID;
 	UUID uuid;
-	@Expose
 	int nodeId;
 	private List<Node> prereqs;
 
@@ -30,12 +33,34 @@ public class Node
 	private static HashMap<String, Integer> courseToIdMap = new HashMap<String, Integer>();
 	private static HashMap<String, UUID> courseToUuidMap = new HashMap<String, UUID>();
 
+	public static File prereqFile;
+	public static OutputStreamWriter prereqFWriter;
+	public static FileOutputStream prereqFOut;
+	static
+	{
+		try
+		{
+			prereqFile = new File("../../courses.json");
+			prereqFile.createNewFile();
+			prereqFOut = new FileOutputStream(prereqFile);
+			prereqFWriter = new OutputStreamWriter(prereqFOut);
+
+			prereqFWriter.append("[");
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public Node(String data, UUID parentUUID, List<Node> children)
 	{
 		if (data == null)
 			data = "";
 		this.courseId = data;
 		treeType = DEFAULT_TYPE;
+		this.prereqs = children;
+
 		// this.postreqUUID = parentUUID;
 		Integer id = courseToIdMap.get(data);
 		if (id == null || this.courseId.length() <= 0)
@@ -43,10 +68,21 @@ public class Node
 			this.nodeId = idNumCounter;
 			idNumCounter++;
 			if (this.courseId.length() > 0)
+			{
 				courseToIdMap.put(this.courseId, this.nodeId);
+			}
+			try
+			{
+				prereqFWriter.append(generateJSON()+",");
+			} catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else
 		{
-//			System.out.println("Found old id. id=" + id + ", courseId=" + courseId);
+			// System.out.println("Found old id. id=" + id + ", courseId=" +
+			// courseId);
 			this.nodeId = id;
 		}
 		// UUID uuid = courseToUuidMap.get(data);
@@ -59,7 +95,10 @@ public class Node
 		// {
 		// this.uuid = uuid;
 		// }
-		this.prereqs = children;
+
+		/*
+		 * if (nodeId == 5) { System.out.println(generateJSON()); }
+		 */
 	}
 
 	/**
@@ -71,14 +110,21 @@ public class Node
 	{
 		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
 				.create();
-		String finalJsonString = gson.toJson(this);
+		return gson.toJson(this);// + "," + generateChildJSON();
+	}
 
+	public String generateChildJSON()
+	{
+		String finalJsonString = "";
 		for (Node e : prereqs)
 		{
-			if (e.courseId.equals(""))
+			// if (e.courseId == null || e.courseId.equals(""))
+			// {
+			if (e.nodeId < this.nodeId)
 			{
-				finalJsonString += "," + e.generateJSON();
+				finalJsonString += e.generateJSON();
 			}
+			// }
 		}
 		return finalJsonString;
 	}

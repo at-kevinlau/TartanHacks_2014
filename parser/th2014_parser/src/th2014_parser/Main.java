@@ -106,23 +106,11 @@ public class Main
 		}
 		*/
 		//@formatter:on
-		File prereqFile = new File("../../prereq.json");
-		prereqFile.createNewFile();
-		FileOutputStream prereqFOut = new FileOutputStream(prereqFile);
-		OutputStreamWriter prereqFWriter = new OutputStreamWriter(prereqFOut);
-
-		File coreqFile = new File("../../coreq.json");
-		coreqFile.createNewFile();
-		FileOutputStream coreqFOut = new FileOutputStream(coreqFile);
-		OutputStreamWriter coreqFWriter = new OutputStreamWriter(coreqFOut);
 
 		File edgeFile = new File("../../edges.json");
 		edgeFile.createNewFile();
 		FileOutputStream edgeFOut = new FileOutputStream(edgeFile);
 		OutputStreamWriter edgeWriter = new OutputStreamWriter(edgeFOut);
-
-		prereqFWriter.append("[");
-		coreqFWriter.append("[");
 
 		for (String s : socURLStrings)
 		{
@@ -149,18 +137,15 @@ public class Main
 
 							String pr = getReqString(coursePage, matchPrereq);
 							System.out.println(linkText + " prereqs: " + pr);
-							prereqFWriter.append(ReqTree.treeFromReqString(
-									linkText, pr, null).generateJSON()+",");
-
+							ReqTree.treeFromReqString(linkText, pr, null);
 							String cr = getReqString(coursePage, matchCoreq);
 							System.out.println(linkText + " coreqs: " + cr);
-							coreqFWriter.append(ReqTree.treeFromReqString(
-									linkText, cr, null).generateJSON()+",");
+							ReqTree.treeFromReqString(linkText, cr, null);
 
 						} catch (IOException e)
 						{
-							System.out
-									.println("Failed to load course page:\n" + coursePageLink);
+							System.out.println("Failed to load course page:\n"
+									+ coursePageLink);
 							continue;
 						}
 
@@ -182,19 +167,16 @@ public class Main
 				// e.printStackTrace();
 			}
 		}
-		prereqFWriter.append("]");
-		coreqFWriter.append("]");
+		Node.prereqFWriter.append("]");
 
 		Gson gson = new Gson();
 		String edgeJsonString = gson.toJson(ReqTree.edgeList);
 		edgeWriter.append(edgeJsonString);
 		ReqTree.edgeList.clear();
 
-		prereqFWriter.close();
-		coreqFWriter.close();
+		Node.prereqFWriter.close();
 		edgeWriter.close();
-		prereqFOut.close();
-		coreqFOut.close();
+		Node.prereqFOut.close();
 		edgeFOut.close();
 		System.out.println("Completed saving JSON pre/co-reqs to files");
 	}
