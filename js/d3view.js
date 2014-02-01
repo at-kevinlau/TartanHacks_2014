@@ -95,7 +95,7 @@ node.append("text")
       {
         return d.courseId;
       } else {
-        return (d.treeType === "AND") ? "\u00a0\u00a0AND" : "\u00a0\u00a0\u00a0OR";
+        return (d.treeType === "AND") ? "\u00a0AND" : "\u00a0\u00a0\u00a0OR";
       }
     })
 
@@ -175,7 +175,9 @@ function selectNode(d, nodeDOMObject) {
       d3.select(node[0][n]).select("text").transition()
     	.duration(750)
     	.attr("dx",-.5*SELECTED_RADIUS)
-    	.style("font-size",SELECTED_MED_FONT_SIZE);
+    	.style("font-size",SELECTED_MED_FONT_SIZE)
+    	.style("fill","#FFF")
+    	.style("stroke", "none");
       if (nodes[n].courseId.length <= 0) {
         nodes[n].prereqIndices.forEach(function(z){
           node[0][z].classList.add("prereqNode");
@@ -185,7 +187,9 @@ function selectNode(d, nodeDOMObject) {
         d3.select(node[0][z]).select("text").transition()
       	.duration(750)
     	  .attr("dx",-.5*SELECTED_RADIUS)
-    	  .style("font-size",SELECTED_MED_FONT_SIZE);
+    	  .style("font-size",SELECTED_MED_FONT_SIZE)
+    	  .style("fill","#FFF")
+    	  .style("stroke", "none");
         });
       }
     });
@@ -206,7 +210,9 @@ function selectNode(d, nodeDOMObject) {
       d3.select(node[0][n]).select("text").transition()
     	.duration(750)
     	.attr("dx",-.5*SELECTED_RADIUS)
-    	.style("font-size",SELECTED_MED_FONT_SIZE);
+    	.style("font-size",SELECTED_MED_FONT_SIZE)
+    	.style("fill","#FFF")
+    	.style("stroke", "none");
       if (nodes[n].courseId.length <= 0) {
         nodes[n].postreqIndices.forEach(function(z){
           node[0][z].classList.add("postreqNode");
@@ -216,7 +222,9 @@ function selectNode(d, nodeDOMObject) {
         d3.select(node[0][z]).select("text").transition()
     	  .duration(750)
     	  .attr("dx",-.5*SELECTED_RADIUS)
-    	  .style("font-size",SELECTED_MED_FONT_SIZE);
+    	  .style("font-size",SELECTED_MED_FONT_SIZE)
+    	  .style("fill","#FFF")
+    	  .style("stroke", "none");
         });
       }
     });
