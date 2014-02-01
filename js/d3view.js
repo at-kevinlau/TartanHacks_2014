@@ -89,7 +89,14 @@ node.append("circle")
 node.append("text")
     .attr("dx", -.75*DESELECTED_RADIUS)
     .attr("dy", ".35em")
-    .text(function(d) { return d.courseId; })
+    .text(function(d) {
+      if (d.courseId.length > 0)
+      {
+        return d.courseId;
+      } else {
+        return (d.treeType === "AND") ? "\u00a0\u00a0& &" : "\u00a0\u00a0\u00a0| |";
+      }
+    })
 
 force.start();
 
@@ -153,9 +160,19 @@ function selectNode(d, nodeDOMObject) {
     	.style("stroke", "#222");
     d.prereqIndices.forEach(function(n){
       node[0][n].classList.add("prereqNode");
+      if (nodes[n].courseId.length <= 0) {
+        nodes[n].prereqIndices.forEach(function(z){
+          node[0][z].classList.add("prereqNode");
+        });
+      }
     });
     d.postreqIndices.forEach(function(n){
       node[0][n].classList.add("postreqNode");
+      if (nodes[n].courseId.length <= 0) {
+        nodes[n].postreqIndices.forEach(function(z){
+          node[0][z].classList.add("postreqNode");
+        });
+      }
     });
     node.classed("nodeSelected", function(d) {
       return d === selectedNodeObj; });
