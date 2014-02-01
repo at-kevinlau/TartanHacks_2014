@@ -5,17 +5,20 @@ var initLinks = [{"source":1,"target":2},{"source":3,"target":4},{"source":3,"ta
 var width = window.innerWidth,
     height = window.innerHeight,
     fill = d3.scale.category20();
+/*var width = 960,
+	height = 500;*/
 
 // mouse event vars
 var selected_node = null;
 
 // init svg
 var outer = d3.select("#chart")
-  .append("svg:svg")
+  .append("svg")
     .attr("width", width)
     .attr("height", height)
     .attr("pointer-events", "all");
 
+//defines what arrowhead looks like
 outer.append('svg:defs').append('svg:marker')
     .attr('id', 'start-arrow')
     .attr('viewBox', '0 -5 10 10')
@@ -27,32 +30,44 @@ outer.append('svg:defs').append('svg:marker')
     .attr('d', 'M10,-5L0,0L10,5')
     .attr('fill', '#000');
 
+//
 var vis = outer
-  .append('svg:g')
-    .call(d3.behavior.zoom().on("zoom", rescale))
+ 	.append('g')
+ 	//special transform...
+ 	.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+    .call(d3.behavior.zoom()
+    .scaleExtent([0,10])	//limits zooming
+    .on("zoom", rescale))
     .on("dblclick.zoom", null)
-  .append('svg:g');
+  	.append('svg:g');
 
+  	
+//creates the background
 vis.append('svg:rect')
+	.attr("class","overlay")
+	.attr("x",-width/2)
+	.attr("y", -height/2)
     .attr('width', width)
     .attr('height', height)
-    .attr('fill', 'white');
+    .attr('fill','white');
 
 // init force layout
 var force = d3.layout.force()
-    .size([width, height])
+    .size([.75,.75])
     .nodes(initNodes)
     .links(initLinks)
-    .linkDistance(5)
+    .linkDistance(3)
     .linkStrength(1)
-    .charge(-3000)
+    .charge(-1000)
     .gravity(1)
+//    .size([width*=.5, height *= .5])
     .on("tick", tick);
 
 // get layout properties
 var nodes = force.nodes(),
     links = force.links();
 
+//makes arrow heads
 var link = vis.selectAll(".link").data(links)
     .enter().insert("svg:path")
     .attr("class", "link")
@@ -113,10 +128,13 @@ function rescale() {
   scale=d3.event.scale;
 
   // keep in screen
-  trans[0] = Math.max(trans[0], 0)
-  trans[1] = Math.max(trans[1], 0)
+  trans[0] = Math.min(width / 2 * (scale - 1), Math.max(width / 2 * (1 - scale), trans[0]));
+  trans[1] = Math.min(height / 2 * (scale - 1) + 230 * scale, Math.max(height / 2 * (1 - scale) - 230 * scale, trans[1]));
 
   vis.attr("transform",
       "translate(" + trans + ")"
       + " scale(" + scale + ")");
+ // d3.layout.force().charge().translate(trans).scale(scale);
+  d3.behavior.zoom().translate(trans);
 }
+
