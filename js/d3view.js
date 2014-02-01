@@ -149,8 +149,8 @@ function selectNode(d) {
     	.duration(750)
     	.attr("dx",-.8*SELECTED_RADIUS)
     	.style("font-size",SELECTED_FONT_SIZE)
-    	.style("fill","#000")
-    	.style("stroke", "#000");
+    	.style("fill","#222")
+    	.style("stroke", "#222");
     node.classed("node_selected", function(d) {
       return d === selectedNodeObj; });
   }
@@ -164,6 +164,7 @@ function deselect() {
     .duration(750)
     .attr("dx",-.75*DESELECTED_RADIUS)
     .style("font-size",DESELECTED_FONT_SIZE)
+    .style("fill", "#cccccc")
     .style("stroke","none");
   node.classed("node_selected", function(d) {
     return d === selectedNodeObj; });
