@@ -94,7 +94,7 @@ node.append("text")
       {
         return d.courseId;
       } else {
-        return (d.treeType === "AND") ? "\u00a0\u00a0& &" : "\u00a0\u00a0\u00a0| |";
+        return (d.treeType === "AND") ? "\u00a0\u00a0and" : "\u00a0\u00a0\u00a0or";
       }
     })
 
