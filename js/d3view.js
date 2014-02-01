@@ -110,7 +110,7 @@ function tick() {
         dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
         normX = deltaX / dist,
         normY = deltaY / dist,
-        sourcePadding = (this.getAttribute("class") == "link prereqLink") ? 
+        sourcePadding = (this.getAttribute("class").indexOf("prereqLink") !== -1) ? 
             (SELECTED_RADIUS + 5):(DESELECTED_RADIUS + 5),
         targetPadding = 0,
         sourceX = d.source.x + (sourcePadding * normX),
@@ -139,7 +139,7 @@ function rescale() {
  // d3.layout.force().charge().translate(trans).scale(scale);
   d3.behavior.zoom().translate(trans);
 }
-
+// prereqs = green, postreqs = blue
 function selectNode(d, nodeDOMObject) {
   if (d == selectedNodeObj) {
     deselect();
@@ -168,6 +168,12 @@ function selectNode(d, nodeDOMObject) {
     });
     d.prereqLinks.forEach(function(n){
       link[0][n].classList.add("prereqLink");
+      link[0][n].classList.add("prereqColorLink");
+      if (links[n].target.courseId.length <= 0) {
+        links[n].target.prereqLinks.forEach(function(z){
+          link[0][z].classList.add("prereqColorLink");
+        });
+      }
     });
     d.postreqIndices.forEach(function(n){
       node[0][n].classList.add("postreqNode");
@@ -179,6 +185,12 @@ function selectNode(d, nodeDOMObject) {
     });
     d.postreqLinks.forEach(function(n){
       link[0][n].classList.add("postreqLink");
+      link[0][n].classList.add("postreqColorLink");
+      if (links[n].source.courseId.length <= 0) {
+        links[n].source.postreqLinks.forEach(function(z){
+          link[0][z].classList.add("postreqColorLink");
+        });
+      }
     });
     node.classed("nodeSelected", function(d) {
       return d === selectedNodeObj; });
@@ -203,6 +215,8 @@ function deselect() {
   node.classed("nodeSelected", false);
   node.classed("prereqNode", false);
   node.classed("postreqNode", false);
+  link.classed("prereqColorLink", false);
+  link.classed("postreqColorLink", false);
   link.classed("prereqLink", false);
   link.classed("postreqLink", false);
   tick();

@@ -55,16 +55,21 @@ path.link {
   transition: stroke 750ms linear;
 }
 
-path.prereqLink {
+path.prereqColorLink {
   stroke: #19D45B;
+}
+
+path.prereqLink {
   -webkit-transition: stroke 750ms linear;
   -moz-transition: stroke 750ms linear;
   -o-transition: stroke 750ms linear;
   transition: stroke 750ms linear;
 }
 
-path.postreqLink {
+path.postreqColorLink {
   stroke: #0992ED;
+}
+path.postreqLink {
   -webkit-transition: stroke 750ms linear;
   -moz-transition: stroke 750ms linear;
   -o-transition: stroke 750ms linear;
