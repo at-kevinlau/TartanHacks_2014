@@ -94,11 +94,21 @@ public class ReqTree implements Serializable
 					parenCount--;
 					if (parenCount <= 0)
 					{
-						Node n = treeFromReqString(null, currString, root.uuid,
-								null, null);
-						children.add(n);
-						edgeList.add(new Edge(root.nodeId, n.nodeId));
-						currString = "";
+						if (currString.length() > 5)
+						{
+							Node n = treeFromReqString(null, currString,
+									root.uuid, null, null);
+							children.add(n);
+							edgeList.add(new Edge(root.nodeId, n.nodeId));
+							currString = "";
+						} else
+						{
+							Node n = new Node(currString, root.uuid,
+									new ArrayList<Node>());
+							children.add(n);
+							edgeList.add(new Edge(root.nodeId, n.nodeId));
+							currString = "";
+						}
 					}
 					break;
 				default:
