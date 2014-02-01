@@ -35,7 +35,7 @@ public class ReqTree implements Serializable
 	};
 
 	public static Node treeFromReqString(String courseNum, String prereqStr,
-			UUID parentUUID)
+			UUID parentUUID, String description)
 	{
 		// System.out.println("treeFromPrereqString: " + prereqStr);
 		TreeType rootType = Node.DEFAULT_TYPE;
@@ -98,7 +98,8 @@ public class ReqTree implements Serializable
 					parenCount--;
 					if (parenCount <= 0)
 					{
-						Node n = treeFromReqString(null, currString, root.uuid);
+						Node n = treeFromReqString(null, currString, root.uuid,
+								null);
 						children.add(n);
 						edgeList.add(new Edge(root.nodeId, n.nodeId));
 						currString = "";
@@ -116,7 +117,9 @@ public class ReqTree implements Serializable
 			edgeList.add(new Edge(root.nodeId, n.nodeId));
 		}
 
-		root.treeType = rootType;
+		int rootId = root.nodeId;
+		Node.allNodes.get(rootId).treeType = rootType;
+		Node.allNodes.get(rootId).description = description;
 		return root;
 	}
 }

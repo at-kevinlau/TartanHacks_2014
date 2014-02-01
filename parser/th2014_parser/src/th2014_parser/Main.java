@@ -82,6 +82,7 @@ public class Main
 	final static Pattern matchCourseNumber = Pattern.compile("^[0-9]{5,5}$");
 	final static Pattern matchPrereq = Pattern.compile("<b>Prerequisites:</b>");
 	final static Pattern matchCoreq = Pattern.compile("<b>Corequisites:</b>.*");
+	final static Pattern matchDesc = Pattern.compile("<b>Description:</b>.*");
 	final static Pattern matchNone = Pattern.compile("None.");
 	final static String socPrefix = "https://enr-apps.as.cmu.edu/open/SOC/";
 
@@ -135,13 +136,13 @@ public class Main
 							Document coursePage = Jsoup.connect(coursePageLink)
 									.get();
 
+							String desc = getReqString(coursePage, matchDesc);
 							String pr = getReqString(coursePage, matchPrereq);
 							System.out.println(linkText + " prereqs: " + pr);
-							ReqTree.treeFromReqString(linkText, pr, null);
+							ReqTree.treeFromReqString(linkText, pr, null, desc);
 							String cr = getReqString(coursePage, matchCoreq);
 							System.out.println(linkText + " coreqs: " + cr);
-							ReqTree.treeFromReqString(linkText, cr, null);
-
+							ReqTree.treeFromReqString(linkText, cr, null, desc);
 						} catch (IOException e)
 						{
 							System.out.println("Failed to load course page:\n"
