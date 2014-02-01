@@ -193,8 +193,9 @@ function selectNode(d, nodeDOMObject) {
       }
     });
     
-    force.charge(function (d) {
-             if (d.classList && d.classList.indexOf("prereqNode") !== -1) {
+    force.charge(function conditionalforce (d) {
+             var index = node[0].indexOf(d);
+             if (nodes[index].classList.indexOf("prereqNode") !== -1) {
                return -2000;
              } else {
                return -1000;
