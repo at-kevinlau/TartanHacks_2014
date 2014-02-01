@@ -192,9 +192,9 @@ function selectNode(d, nodeDOMObject) {
         });
       }
     });
-    
+    /*
     force.charge(function conditionalforce (d) {
-             var index = node[0].indexOf(d);
+             console.log("hi " + d);
              if (nodes[index].classList.indexOf("prereqNode") !== -1) {
                return -2000;
              } else {
@@ -202,6 +202,7 @@ function selectNode(d, nodeDOMObject) {
              }
            });
 force.start();
+*/
     node.classed("nodeSelected", function(d) {
       return d === selectedNodeObj; });
   }
