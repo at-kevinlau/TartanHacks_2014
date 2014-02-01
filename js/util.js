@@ -30,3 +30,15 @@ function searchBox(){
        return false;
     }
 }
+
+function describe(courseId){
+    var div = document.getElementById("courseDescription");
+    if (!courseId){
+        div.setAttribute("class","unactive");
+        return;
+    } else {
+        var node = nodes[courses[courseId]];
+        div.innerHTML = "<h1>" + node.courseId +"</h1>";
+        div.setAttribute("class","active");
+    }
+}
