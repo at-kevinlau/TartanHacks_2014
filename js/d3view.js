@@ -122,6 +122,9 @@ function tick() {
       
   node.attr("transform",
       function(d,i) {return "translate(" + d.x + ", " + d.y + ")"});
+  
+//  console.log(d3.select(node[0]));
+      
 }
 
 // pan and scale
@@ -201,9 +204,9 @@ function selectNode(d, nodeDOMObject) {
     });
     force.charge(function conditionalforce (d) {
              if (node[0][d.nodeId].classList.contains("prereqNode") || node[0][d.nodeId].classList.contains("postreqNode") ) {
-               return -3000;
-             } else {
                return -1000;
+             } else {
+               return -3000;
              }
            });
     force.start();
