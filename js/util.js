@@ -38,10 +38,10 @@ function describe(courseId){
         return;
     } else {
         var node = nodes[courses[courseId]];
-        div.innerHTML = "<p style='font-size:5em'>" + 
-        node.courseId.slice(0,2) + "-" + node.courseId.slice(2,5) +"</h1>"+
-        "<p style='font-size:6em'>" + node.title + "</h1>" +
-        "<p style='font-size:3.5em'>"+node.description+"</p>";
+        div.innerHTML = "<p style='font-weight: bold; text-align: center;'>" +
+        node.courseId.slice(0,2) + "-" + node.courseId.slice(2,5) +": "+
+        node.title + "</h1>" +
+        "<p style=''>"+node.description;
         div.setAttribute("class","active");
     }
 }
