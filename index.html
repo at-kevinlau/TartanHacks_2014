@@ -17,14 +17,14 @@
       <form>
         <input type="text" id="search_text" class="textbox" onkeydown="return searchBox(event)"
         placeholder="Search Course #..." maxlength="6" autofocus autocomplete="off">
-        <input type="button" name="search_button" class="search_button" onclick="searchButton(event)">
+        <input type="button" name="search_button" id="searchButton" class="button" onclick="searchButton(event)">
       </form>
     </li>
     <li class="search" style="top:55px">
       <form>
         <input type="text" id="upload_text" class="textbox" onkeydown="return uploadBox(event)"
         placeholder="Upload courses taken..." autocomplete="off">
-        <input type="button" name="search_button" class="search_button" onclick="uploadButton(event)">
+        <input type="button" name="search_button" id="uploadButton" class="button" onclick="uploadButton(event)">
       </form>
     </li>
     <div id="courseDescription" class="unactive" style="white-space: pre-line;font-size:3em; height: 80%; overflow: scroll; text-align: left;"></div>

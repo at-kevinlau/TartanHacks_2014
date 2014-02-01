@@ -76,11 +76,10 @@ body {
     background: #3498db;
 }
 
-.search_button {
+.button {
     position:absolute;
     right:0;
     border: 0 none;
-    background: #2980b9 url(../img/search.png) center no-repeat;
     width: 60px; 
     float: left;
     padding: 0;
@@ -90,9 +89,27 @@ body {
     outline:0;
 }
 
+#searchButton {
+    background: #2980b9 url(../img/search.png) center no-repeat;
+}
+
+#uploadButton {
+    background: #2980b9 url(../img/upload.png) center no-repeat;
+}
+
+#searchButton:hover {
+    transition: all 0.5s;
+    background: #3498db url(../img/search.png) center no-repeat;
+}
+
+#uploadButton:hover {
+    transition: all 0.5s;
+    background: #3498db url(../img/upload.png) center no-repeat;
+}
+
 #courseDescription {
     position:relative;
-    top:52px;
+    top:108px;
 }
 
 #courseDescription.active{
