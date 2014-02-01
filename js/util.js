@@ -11,3 +11,16 @@ function search(query) {
         selectNode(nodes[courses[query]],node[0][courses[query]]);
     }
 }
+
+
+function searchButton(){
+  search(document.getElementById("search_text").value);
+}
+
+function searchBox(){
+    if (event.keyCode == 13) 
+    {
+       search(document.getElementById("search_text").value);
+       return false;
+    }
+}

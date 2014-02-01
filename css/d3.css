@@ -1,11 +1,3 @@
-body {
-  font: 5px sans-serif;
-  position: relative;
-  width: 960px;
-  height: 500px;
-  fill: #444;
-}
-
 text{
   fill: #FFF;
 }
@@ -29,7 +21,8 @@ text{
 }
 
 .prereqNode {
-  fill: #19D45B;
+/*  fill: #19D45B;*/
+  fill: #c0392b;
   -webkit-transition: fill 750ms linear;
   -moz-transition: fill 750ms linear;
   -o-transition: fill 750ms linear;
@@ -37,7 +30,8 @@ text{
 }
 
 .postreqNode {
-  fill: #0992ED;
+/*  fill: #0992ED;*/
+  fill: #2980b9;
   -webkit-transition: fill 750ms linear;
   -moz-transition: fill 750ms linear;
   -o-transition: fill 750ms linear;
@@ -55,16 +49,22 @@ path.link {
   transition: stroke 750ms linear;
 }
 
+path.prereqColorLink {
+/*  stroke: #19D45B; */
+  stroke: #e74c3c;
+}
+
 path.prereqLink {
-  stroke: #19D45B;
   -webkit-transition: stroke 750ms linear;
   -moz-transition: stroke 750ms linear;
   -o-transition: stroke 750ms linear;
   transition: stroke 750ms linear;
 }
 
-path.postreqLink {
+path.postreqColorLink {
   stroke: #0992ED;
+}
+path.postreqLink {
   -webkit-transition: stroke 750ms linear;
   -moz-transition: stroke 750ms linear;
   -o-transition: stroke 750ms linear;
