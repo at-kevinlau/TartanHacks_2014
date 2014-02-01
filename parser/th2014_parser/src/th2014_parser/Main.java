@@ -83,6 +83,7 @@ public class Main
 	final static Pattern matchPrereq = Pattern.compile("<b>Prerequisites:</b>");
 	final static Pattern matchCoreq = Pattern.compile("<b>Corequisites:</b>.*");
 	final static Pattern matchDesc = Pattern.compile("<b>Description:</b>.*");
+	final static Pattern matchTitle = Pattern.compile(".*&nbsp;&nbsp;.*");
 	final static Pattern matchNone = Pattern.compile("None.");
 	final static String socPrefix = "https://enr-apps.as.cmu.edu/open/SOC/";
 
@@ -137,12 +138,15 @@ public class Main
 									.get();
 
 							String desc = getReqString(coursePage, matchDesc);
+							String title = getTitleString(coursePage);
 							String pr = getReqString(coursePage, matchPrereq);
 							System.out.println(linkText + " prereqs: " + pr);
-							ReqTree.treeFromReqString(linkText, pr, null, desc);
+							ReqTree.treeFromReqString(linkText, pr, null, desc,
+									title);
 							String cr = getReqString(coursePage, matchCoreq);
 							System.out.println(linkText + " coreqs: " + cr);
-							ReqTree.treeFromReqString(linkText, cr, null, desc);
+							ReqTree.treeFromReqString(linkText, cr, null, desc,
+									title);
 						} catch (IOException e)
 						{
 							System.out.println("Failed to load course page:\n"
@@ -204,6 +208,29 @@ public class Main
 						.matches())
 				{
 					return fontTaggedEles.get(i + 1).html();
+				} else
+				{
+					return "";
+				}
+			}
+		}
+		return "";
+	}
+
+	static String getTitleString(Document coursePage)
+	{
+		Elements bTaggedEles = coursePage.getElementsByTag("b");
+
+		for (int i = 0; i < bTaggedEles.size(); i++)
+		{
+			Element bEle = bTaggedEles.get(i);
+			if (matchTitle.matcher(bEle.html()).matches()
+					&& i < bTaggedEles.size())
+			{
+				// if 'None.', return null
+				if (!matchNone.matcher(bTaggedEles.get(i).html()).matches())
+				{
+					return bTaggedEles.get(i).html().substring(17);
 				} else
 				{
 					return "";

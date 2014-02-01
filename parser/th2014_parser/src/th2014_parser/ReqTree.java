@@ -1,9 +1,5 @@
 package th2014_parser;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -35,7 +31,7 @@ public class ReqTree implements Serializable
 	};
 
 	public static Node treeFromReqString(String courseNum, String prereqStr,
-			UUID parentUUID, String description)
+			UUID parentUUID, String description, String title)
 	{
 		// System.out.println("treeFromPrereqString: " + prereqStr);
 		TreeType rootType = Node.DEFAULT_TYPE;
@@ -99,7 +95,7 @@ public class ReqTree implements Serializable
 					if (parenCount <= 0)
 					{
 						Node n = treeFromReqString(null, currString, root.uuid,
-								null);
+								null, null);
 						children.add(n);
 						edgeList.add(new Edge(root.nodeId, n.nodeId));
 						currString = "";
@@ -120,6 +116,7 @@ public class ReqTree implements Serializable
 		int rootId = root.nodeId;
 		Node.allNodes.get(rootId).treeType = rootType;
 		Node.allNodes.get(rootId).description = description;
+		Node.allNodes.get(rootId).title = title;
 		return root;
 	}
 }
