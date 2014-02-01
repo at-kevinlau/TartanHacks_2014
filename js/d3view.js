@@ -85,9 +85,7 @@ function tick() {
       .attr("y2", function(d) { return d.target.y; });
 
   node.attr("transform",
-      function(d,i) {"translate(" + d.x + ", " + d.y + ")"});
-  /*.attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; });*/
+      function(d,i) {return "translate(" + d.x + ", " + d.y + ")"});
 }
 
 // pan and scale
