@@ -199,17 +199,14 @@ function selectNode(d, nodeDOMObject) {
         });
       }
     });
-    /*
     force.charge(function conditionalforce (d) {
-             console.log("hi " + d);
-             if (nodes[index].classList.indexOf("prereqNode") !== -1) {
-               return -2000;
+             if (node[0][d.nodeId].classList.contains("prereqNode") || node[0][d.nodeId].classList.contains("postreqNode") ) {
+               return -3000;
              } else {
                return -1000;
              }
            });
 force.start();
-*/
     node.classed("nodeSelected", function(d) {
       return d === selectedNodeObj; });
   }
