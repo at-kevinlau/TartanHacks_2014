@@ -46,10 +46,28 @@ function describe(courseId){
     }
 }
 
-function takeClasses() {
-    var example=["18213","18100","18220"]
-    example.forEach(function(courseId){
+function takeClasses(text) {
+    var courseArray = text.match(/\d\d-\d\d\d/g);
+    /*courseArray.concat(text.match(/\d\d\d\d\d/g));
+    console.log(courseArray)*/
+    if (!courseArray) return;
+    for (var i=0; i<courseArray.length; i++){
+        courseArray[i] = courseArray[i].replace('-', '');
+    }
+    courseArray.forEach(function(courseId){
+        console.log(courseId)
         node[0][courses[courseId]].classList.add("nodeTaken");
     });
 }
-takeClasses();
+
+function uploadButton(){
+  takeClasses(document.getElementById("upload_text").value);
+}
+
+function uploadBox(){
+    if (event.keyCode == 13) 
+    {
+       takeClasses(document.getElementById("upload_text").value);
+       return false;
+    }
+}

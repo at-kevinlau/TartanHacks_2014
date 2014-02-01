@@ -35,7 +35,7 @@ body {
     padding: 15px 0;
 }
 
-#search {
+.search {
     pointer-events:auto;
     width:100%;
     padding:0;
@@ -43,7 +43,7 @@ body {
     position:relative;
 }
 
-#search_text{
+.textbox{
     position:absolute;
     left:0;
     width:100%;
@@ -72,11 +72,11 @@ body {
 :-ms-input-placeholder { /* Internet Explorer 10+ */
     color: #CCC;
 }
-#search_text:focus {
+.textbox:focus {
     background: #3498db;
 }
 
-#search_button {
+.search_button {
     position:absolute;
     right:0;
     border: 0 none;
