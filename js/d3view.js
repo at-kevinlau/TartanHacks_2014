@@ -13,11 +13,7 @@ var width = 960,
     fill = d3.scale.category20();
 
 // mouse event vars
-var selected_node = null,
-    selected_link = null,
-    mousedown_link = null,
-    mousedown_node = null,
-    mouseup_node = null;
+var selected_node = null;
 
 // init svg
 var outer = d3.select("#chart")
@@ -30,10 +26,7 @@ var vis = outer
   .append('svg:g')
     .call(d3.behavior.zoom().on("zoom", rescale))
     .on("dblclick.zoom", null)
-  .append('svg:g')
-    .on("mousemove", mousemove)
-    .on("mousedown", mousedown)
-    .on("mouseup", mouseup);
+  .append('svg:g');
 
 vis.append('svg:rect')
     .attr('width', width)
@@ -44,19 +37,10 @@ vis.append('svg:rect')
 var force = d3.layout.force()
     .size([width, height])
     .nodes(initNodes) // initialize with a single node
-    .linkDistance(50)
+    .links([{source:0, target:1}])
     .charge(0)
     .gravity(0)
     .on("tick", tick);
-
-
-// line displayed when dragging new nodes
-var drag_line = vis.append("line")
-    .attr("class", "drag_line")
-    .attr("x1", 0)
-    .attr("y1", 0)
-    .attr("x2", 0)
-    .attr("y2", 0);
 
 // get layout properties
 var nodes = force.nodes(),
@@ -64,66 +48,7 @@ var nodes = force.nodes(),
     node = vis.selectAll(".node"),
     link = vis.selectAll(".link");
 
-// add keyboard callback
-d3.select(window)
-    .on("keydown", keydown);
-
 redraw();
-
-// focus on svg
-// vis.node().focus();
-
-function mousedown() {
-  if (!mousedown_node && !mousedown_link) {
-    // allow panning if nothing is selected
-    vis.call(d3.behavior.zoom().on("zoom"), rescale);
-    return;
-  }
-}
-
-function mousemove() {
-  if (!mousedown_node) return;
-
-  // update drag line
-  drag_line
-      .attr("x1", mousedown_node.x)
-      .attr("y1", mousedown_node.y)
-      .attr("x2", d3.svg.mouse(this)[0])
-      .attr("y2", d3.svg.mouse(this)[1]);
-
-}
-
-function mouseup() {
-  if (mousedown_node) {
-    // hide drag line
-    drag_line
-      .attr("class", "drag_line_hidden")
-
-    if (!mouseup_node) {
-      // add node
-      var point = d3.mouse(this),
-        node = {x: point[0], y: point[1]},
-        n = nodes.push(node);
-
-      // select new node
-      selected_node = node;
-      selected_link = null;
-      
-      // add link to mousedown node
-      links.push({source: mousedown_node, target: node});
-    }
-
-    redraw();
-  }
-  // clear mouse event vars
-  resetMouseVars();
-}
-
-function resetMouseVars() {
-  mousedown_node = null;
-  mouseup_node = null;
-  mousedown_link = null;
-}
 
 function tick() {
   link.attr("x1", function(d) { return d.source.x; })
@@ -140,6 +65,10 @@ function rescale() {
   trans=d3.event.translate;
   scale=d3.event.scale;
 
+  // keep in screen
+  trans[0] = Math.max(trans[0], 0)
+  trans[1] = Math.max(trans[1], 0)
+
   vis.attr("transform",
       "translate(" + trans + ")"
       + " scale(" + scale + ")");
@@ -151,68 +80,21 @@ function redraw() {
   link = link.data(links);
 
   link.enter().insert("line", ".node")
-      .attr("class", "link")
-      .on("mousedown", 
-        function(d) { 
-          mousedown_link = d; 
-          if (mousedown_link == selected_link) selected_link = null;
-          else selected_link = mousedown_link; 
-          selected_node = null; 
-          redraw(); 
-        })
+      .attr("class", "link");
 
   link.exit().remove();
-
-  link
-    .classed("link_selected", function(d) { return d === selected_link; });
 
   node = node.data(nodes);
 
   node.enter().insert("circle")
       .attr("class", "node")
       .attr("r", 5)
-      .on("mousedown", 
-        function(d) { 
-          // disable zoom
-          vis.call(d3.behavior.zoom().on("zoom"), null);
-
+      .on("click", 
+        function(d) {
           mousedown_node = d;
           if (mousedown_node == selected_node) selected_node = null;
-          else selected_node = mousedown_node; 
-          selected_link = null; 
-
-          // reposition drag line
-          drag_line
-              .attr("class", "link")
-              .attr("x1", mousedown_node.x)
-              .attr("y1", mousedown_node.y)
-              .attr("x2", mousedown_node.x)
-              .attr("y2", mousedown_node.y);
-
-          redraw(); 
-        })
-      .on("mousedrag",
-        function(d) {
-          // redraw();
-        })
-      .on("mouseup", 
-        function(d) { 
-          if (mousedown_node) {
-            mouseup_node = d; 
-            if (mouseup_node == mousedown_node) { resetMouseVars(); return; }
-
-            // add link
-            var link = {source: mousedown_node, target: mouseup_node};
-            links.push(link);
-
-            // select new link
-            selected_link = link;
-            selected_node = null;
-
-            // enable zoom
-            vis.call(d3.behavior.zoom().on("zoom"), rescale);
-            redraw();
-          } 
+          else selected_node = mousedown_node;
+          redraw();
         })
     .transition()
       .duration(750)
@@ -225,8 +107,6 @@ function redraw() {
 
   node
     .classed("node_selected", function(d) { return d === selected_node; });
-
-  
 
   if (d3.event) {
     // prevent browser's default behavior
@@ -244,14 +124,4 @@ function spliceLinksForNode(node) {
   toSplice.map(
     function(l) {
       links.splice(links.indexOf(l), 1); });
-}
-
-function keydown() {
-  if (!selected_node && !selected_link) return;
-  switch (d3.event.keyCode) {
-    case 8: // backspace
-    case 46: { // delete
-      break;
-    }
-  }
 }
