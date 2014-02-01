@@ -172,13 +172,15 @@ public class Main
 				// e.printStackTrace();
 			}
 		}
+		Edge.writeEdgesToNodes();
 		Node.writeAllNodesToFile();
 		Node.prereqFWriter.append("]");
 
 		Gson gson = new Gson();
-		String edgeJsonString = gson.toJson(ReqTree.edgeList);
+		String edgeJsonString = gson.toJson(Edge.edgeList);
 		edgeWriter.append(edgeJsonString);
-		ReqTree.edgeList.clear();
+		
+		Edge.edgeList.clear();
 
 		Node.prereqFWriter.close();
 		edgeWriter.close();

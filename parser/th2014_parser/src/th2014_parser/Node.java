@@ -23,10 +23,19 @@ public class Node
 	TreeType treeType;
 	// UUID postreqUUID;
 	UUID uuid;
-	int nodeId;
+	@Expose
+	int nodeId; // corresponds to index in allNodes
 	@Expose
 	boolean isStarter = false;
 	private List<Node> prereqs;
+	@Expose
+	public List<Integer> prereqIndices;
+	@Expose
+	public List<Integer> postreqIndices;
+	@Expose
+	public List<Integer> prereqLinks;
+	@Expose
+	public List<Integer> postreqLinks;
 	@Expose
 	public String description;
 	@Expose
@@ -97,6 +106,11 @@ public class Node
 		{
 			isStarter = true;
 		}
+		prereqIndices = new ArrayList<Integer>();
+		postreqIndices = new ArrayList<Integer>();
+
+		prereqLinks = new ArrayList<Integer>();
+		postreqLinks = new ArrayList<Integer>();
 
 		// this.postreqUUID = parentUUID;
 		Integer id = courseToIdMap.get(cid);

@@ -7,7 +7,6 @@ import java.util.UUID;
 public class ReqTree implements Serializable
 {
 	private static final long serialVersionUID = 6062494209339114482L;
-	public static ArrayList<Edge> edgeList = new ArrayList<Edge>();
 
 	enum TreeType
 	{
@@ -66,7 +65,7 @@ public class ReqTree implements Serializable
 						Node n = new Node(currString, root.uuid,
 								new ArrayList<Node>());
 						children.add(n);
-						edgeList.add(new Edge(root.nodeId, n.nodeId));
+						Edge.edgeList.add(new Edge(root.nodeId, n.nodeId));
 					}
 					currString = "";
 					break;
@@ -99,14 +98,14 @@ public class ReqTree implements Serializable
 							Node n = treeFromReqString(null, currString,
 									root.uuid, null, null);
 							children.add(n);
-							edgeList.add(new Edge(root.nodeId, n.nodeId));
+							Edge.edgeList.add(new Edge(root.nodeId, n.nodeId));
 							currString = "";
 						} else
 						{
 							Node n = new Node(currString, root.uuid,
 									new ArrayList<Node>());
 							children.add(n);
-							edgeList.add(new Edge(root.nodeId, n.nodeId));
+							Edge.edgeList.add(new Edge(root.nodeId, n.nodeId));
 							currString = "";
 						}
 					}
@@ -120,7 +119,7 @@ public class ReqTree implements Serializable
 		{
 			Node n = new Node(currString, root.uuid, new ArrayList<Node>());
 			children.add(n);
-			edgeList.add(new Edge(root.nodeId, n.nodeId));
+			Edge.edgeList.add(new Edge(root.nodeId, n.nodeId));
 		}
 
 		int rootId = root.nodeId;
