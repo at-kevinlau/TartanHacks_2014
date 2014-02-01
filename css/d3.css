@@ -14,6 +14,7 @@ text{
 .nodeSelected {
   fill: #ff7f0e;
   stroke: #ff7f0e;
+  opacity: 1;
   -webkit-transition: fill 750ms linear;
   -moz-transition: fill 750ms linear;
   -o-transition: fill 750ms linear;
@@ -23,6 +24,7 @@ text{
 .prereqNode {
 /*  fill: #19D45B;*/
   fill: #c0392b;
+  opacity: 1;
   -webkit-transition: fill 750ms linear;
   -moz-transition: fill 750ms linear;
   -o-transition: fill 750ms linear;
@@ -32,6 +34,7 @@ text{
 .postreqNode {
 /*  fill: #0992ED;*/
   fill: #2980b9;
+  opacity: 1;
   -webkit-transition: fill 750ms linear;
   -moz-transition: fill 750ms linear;
   -o-transition: fill 750ms linear;
@@ -49,9 +52,14 @@ path.link {
   transition: stroke 750ms linear;
 }
 
+path.lowOpacity {
+  opacity: .2;
+}
+
 path.prereqColorLink {
 /*  stroke: #19D45B; */
   stroke: #e74c3c;
+  opacity: 1;
 }
 
 path.prereqLink {
@@ -63,6 +71,7 @@ path.prereqLink {
 
 path.postreqColorLink {
   stroke: #0992ED;
+  opacity: 1;
 }
 path.postreqLink {
   -webkit-transition: stroke 750ms linear;
