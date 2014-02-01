@@ -5,46 +5,82 @@ import java.util.List;
 import java.util.UUID;
 
 import com.google.gson.*;
+import com.google.gson.annotations.Expose;
 
 import th2014_parser.ReqTree.TreeType;
 
 public class Node
 {
-	String data;
+	@Expose
+	String courseId;
 	// All children of a node must have fulfilled prereqs
+	@Expose
 	TreeType treeType;
-	//UUID postreqUUID;
+	// UUID postreqUUID;
 	UUID uuid;
-	List<Node> prereqs;
+	@Expose
+	int nodeId;
+	private List<Node> prereqs;
 
+	// make uuids zero-indexed
+	// array of pairs of edges
 	public static final TreeType DEFAULT_TYPE = TreeType.OR;
+	private static int idNumCounter = 0;
 
+	private static HashMap<String, Integer> courseToIdMap = new HashMap<String, Integer>();
 	private static HashMap<String, UUID> courseToUuidMap = new HashMap<String, UUID>();
 
 	public Node(String data, UUID parentUUID, List<Node> children)
 	{
 		if (data == null)
 			data = "";
-		this.data = data;
+		this.courseId = data;
 		treeType = DEFAULT_TYPE;
-		//this.postreqUUID = parentUUID;
-
-		UUID uuid = courseToUuidMap.get(data);
-		if (uuid == null)
+		// this.postreqUUID = parentUUID;
+		Integer id = courseToIdMap.get(data);
+		if (id == null || this.courseId.length() <= 0)
 		{
-			this.uuid = UUID.randomUUID();
+			this.nodeId = idNumCounter;
+			idNumCounter++;
+			if (this.courseId.length() > 0)
+				courseToIdMap.put(this.courseId, this.nodeId);
 		} else
 		{
-			this.uuid = uuid;
+//			System.out.println("Found old id. id=" + id + ", courseId=" + courseId);
+			this.nodeId = id;
 		}
+		// UUID uuid = courseToUuidMap.get(data);
+		// if (uuid == null || this.courseId.length() <= 0)
+		// {
+		// this.uuid = UUID.randomUUID();
+		// if (this.courseId.length() > 0)
+		// courseToUuidMap.put(this.courseId, this.uuid);
+		// } else
+		// {
+		// this.uuid = uuid;
+		// }
 		this.prereqs = children;
 	}
 
+	/**
+	 * 
+	 * @return comma-separated list of this node and all child nodes with lesser
+	 *         nodeIds
+	 */
 	public String generateJSON()
 	{
-		Gson gson = new Gson();
-		return gson.toJson(this);
-		
+		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+				.create();
+		String finalJsonString = gson.toJson(this);
+
+		for (Node e : prereqs)
+		{
+			if (e.courseId.equals(""))
+			{
+				finalJsonString += "," + e.generateJSON();
+			}
+		}
+		return finalJsonString;
 	}
 
 	@Override
@@ -52,9 +88,9 @@ public class Node
 	{
 		// String resultString = "Node [";
 		String resultString = "[";
-		if (data != null && data.length() > 0)
+		if (courseId != null && courseId.length() > 0)
 		{
-			resultString += "data=" + data;
+			resultString += "data=" + courseId;
 			if (prereqs.size() > 0)
 			{
 				resultString += ", ";
@@ -80,10 +116,5 @@ public class Node
 			resultString += "}";
 		}
 		return resultString + "]";
-	}
-
-	public void setUUID(UUID uuid)
-	{
-		this.uuid = uuid;
 	}
 }

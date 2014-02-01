@@ -1,24 +1,88 @@
 package th2014_parser;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 
+import com.google.gson.Gson;
+
 public class Main
 {
 	//@formatter:off
+	final static String socURLPrefix = "https://enr-apps.as.cmu.edu/open/SOC/SOCServlet?Formname=GET_CLASSES&SUBMIT=Retrieve+Schedule&SEMESTER=S14&GRAD_UNDER=All&MINI=NO&DEPT=";
 	final static String[] socURLStrings = {
-"https://enr-apps.as.cmu.edu/open/SOC/SOCServlet?Formname=GET_CLASSES&SUBMIT=Retrieve+Schedule&SEMESTER=S14&GRAD_UNDER=All&MINI=NO&DEPT=ECE"
+		/*"AFR",
+		"ARC",
+		"ART",
+		"BXA",
+		"BSC",
+		"BMD",
+		"BA+",
+		"CFA",
+		"CIT",
+		"CMU",
+		"CAS",
+		"CNB",
+		"CHE",
+		"CMY",
+		"CEE",
+		"CB+",
+		"CS+",
+		"BCA",
+		"CRM",
+		"DES",
+		"ISH",
+		"HSS",
+		"DRA",
+		"ECO",*/
+		"ECE"/*,
+		"IAE",
+		"EPP",
+		"ENG",
+		"ETC",
+		"H00",
+		"HC+",
+		"HIS",
+		"HCI",
+		"BHA",
+		"ICT",
+		"INI",
+		"ISM",
+		"ISR",
+		"LTI",
+		"MCS",
+		"MLG",
+		"MSE",
+		"MSC",
+		"MEG",
+		"MED",
+		"MST",
+		"ML+",
+		"MUS",
+		"NVS",
+		"PHI",
+		"PE+",
+		"PHY",
+		"PSY",
+		"PMP",
+		"PPP",
+		"ROB",
+		"BSA",
+		"SV+",
+		"SDS",
+		"SE+",
+		"STA",
+		"STU",
+		"IA+"*/
 	};
 	//@formatter:on
 	final static Pattern matchCourseNumber = Pattern.compile("^[0-9]{5,5}$");
 	final static Pattern matchPrereq = Pattern.compile("<b>Prerequisites:</b>");
 	final static Pattern matchCoreq = Pattern.compile("<b>Corequisites:</b>.*");
-	final static Pattern matchNone = Pattern.compile("None.*");
+	final static Pattern matchNone = Pattern.compile("None.");
 	final static String socPrefix = "https://enr-apps.as.cmu.edu/open/SOC/";
 
 	public static void main(String[] args) throws IOException
@@ -26,16 +90,16 @@ public class Main
 		//@formatter:off
 		
 		/*
-		 System.out.println(PrereqTree .treeFromPrereqString( "18510",
+		 System.out.println(ReqTree.treeFromReqString( "18510",
 		 "(18300 and 18320) or (18300 and 18491) or (18310 and 18320) or (18310 and 18491) or (18491 and 18320) or (18300 and 18421) or (18310 and 18421) or (18"
 		 , null));
-		*/
+		 */
 		/*
-		ReqTree
+		System.out.println(ReqTree
 				.treeFromReqString(
 						"18510",
 						"(18300 and 18320) or (18300 and 18491) or (18310 and 18320) or (18310 and 18491) or (18491 and 18320) or (18300 and 18421) or (18310 and 18421) or (18",
-						null).generateJSON();
+						null).generateJSON());
 		if (true)
 		{
 			return;
@@ -43,16 +107,26 @@ public class Main
 		*/
 		//@formatter:on
 		File prereqFile = new File("../../prereq.json");
-		File coreqFile = new File("../../coreq.json");
 		prereqFile.createNewFile();
-		coreqFile.createNewFile();
 		FileOutputStream prereqFOut = new FileOutputStream(prereqFile);
-		FileOutputStream coreqFOut = new FileOutputStream(coreqFile);
 		OutputStreamWriter prereqFWriter = new OutputStreamWriter(prereqFOut);
+
+		File coreqFile = new File("../../coreq.json");
+		coreqFile.createNewFile();
+		FileOutputStream coreqFOut = new FileOutputStream(coreqFile);
 		OutputStreamWriter coreqFWriter = new OutputStreamWriter(coreqFOut);
+
+		File edgeFile = new File("../../edges.json");
+		edgeFile.createNewFile();
+		FileOutputStream edgeFOut = new FileOutputStream(edgeFile);
+		OutputStreamWriter edgeWriter = new OutputStreamWriter(edgeFOut);
+
+		prereqFWriter.append("[");
+		coreqFWriter.append("[");
 
 		for (String s : socURLStrings)
 		{
+			s = socURLPrefix + s;
 			try
 			{
 				Document deptPage = Jsoup.connect(s).get();
@@ -74,11 +148,12 @@ public class Main
 									.get();
 
 							String pr = getReqString(coursePage, matchPrereq);
-							String cr = getReqString(coursePage, matchCoreq);
 							System.out.println(linkText + " prereqs: " + pr);
-							System.out.println(linkText + " coreqs: " + cr);
 							prereqFWriter.append(ReqTree.treeFromReqString(
 									linkText, pr, null).generateJSON());
+
+							String cr = getReqString(coursePage, matchCoreq);
+							System.out.println(linkText + " coreqs: " + cr);
 							coreqFWriter.append(ReqTree.treeFromReqString(
 									linkText, cr, null).generateJSON());
 
@@ -107,10 +182,20 @@ public class Main
 				// e.printStackTrace();
 			}
 		}
+		prereqFWriter.append("]");
+		coreqFWriter.append("]");
+
+		Gson gson = new Gson();
+		String edgeJsonString = gson.toJson(ReqTree.edgeList);
+		edgeWriter.append(edgeJsonString);
+		ReqTree.edgeList.clear();
+
 		prereqFWriter.close();
 		coreqFWriter.close();
+		edgeWriter.close();
 		prereqFOut.close();
 		coreqFOut.close();
+		edgeFOut.close();
 		System.out.println("Completed saving JSON pre/co-reqs to files");
 	}
 
@@ -130,9 +215,17 @@ public class Main
 			if (reqMatcher.matcher(fontEle.html()).matches()
 					&& i < fontTaggedEles.size() - 1)
 			{
-				return fontTaggedEles.get(i + 1).html();
+				// if 'None.', return null
+				if (!matchNone.matcher(fontTaggedEles.get(i + 1).html())
+						.matches())
+				{
+					return fontTaggedEles.get(i + 1).html();
+				} else
+				{
+					return "";
+				}
 			}
 		}
-		return null;
+		return "";
 	}
 }

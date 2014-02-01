@@ -7,6 +7,7 @@ import java.util.UUID;
 public class ReqTree implements Serializable
 {
 	private static final long serialVersionUID = 6062494209339114482L;
+	public static ArrayList<Edge> edgeList = new ArrayList<Edge>();
 
 	enum TreeType
 	{
@@ -62,8 +63,10 @@ public class ReqTree implements Serializable
 						rootType = TreeType.AND;
 					} else if (currString.length() > 0)
 					{
-						children.add(new Node(currString, root.uuid,
-								new ArrayList<Node>()));
+						Node n = new Node(currString, root.uuid,
+								new ArrayList<Node>());
+						children.add(n);
+						edgeList.add(new Edge(root.nodeId, n.nodeId));
 					}
 					currString = "";
 					break;
@@ -91,8 +94,9 @@ public class ReqTree implements Serializable
 					parenCount--;
 					if (parenCount <= 0)
 					{
-						children.add(treeFromReqString(null, currString,
-								root.uuid));
+						Node n = treeFromReqString(null, currString, root.uuid);
+						children.add(n);
+						edgeList.add(new Edge(root.nodeId, n.nodeId));
 						currString = "";
 					}
 					break;
@@ -103,7 +107,9 @@ public class ReqTree implements Serializable
 		}
 		if (parenCount == 0)
 		{
-			children.add(new Node(currString, root.uuid, new ArrayList<Node>()));
+			Node n = new Node(currString, root.uuid, new ArrayList<Node>());
+			children.add(n);
+			edgeList.add(new Edge(root.nodeId, n.nodeId));
 		}
 
 		root.treeType = rootType;
