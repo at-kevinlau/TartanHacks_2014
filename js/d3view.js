@@ -95,7 +95,7 @@ node.append("text")
       {
         return d.courseId;
       } else {
-        return (d.treeType === "AND") ? "\u00a0AND" : "\u00a0\u00a0\u00a0OR";
+        return (d.treeType === "AND") ? "\u00a0AND" : "\u00a0\u00a0OR";
       }
     })
 
@@ -263,6 +263,16 @@ function deselect() {
     .style("font-size",DESELECTED_FONT_SIZE)
     .style("fill", "#FFF")
     .style("stroke","none");
+   d3.selectAll("circle").transition()
+     .duration(750)
+     .attr("r", DESELECTED_RADIUS);
+   d3.selectAll("text").transition()
+     .duration(750)
+     .attr("dx",-.75*DESELECTED_RADIUS)
+     .style("font-size",DESELECTED_FONT_SIZE)
+     .style("fill", "#FFF")
+     .style("stroke","none");
+
   node.classed("nodeSelected", function(d) {
     return d === selectedNodeObj; });
   selectedNodeObj = null;
