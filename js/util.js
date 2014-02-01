@@ -6,6 +6,9 @@ for (var i = 0; i < nodes.length; i++)
 }
 
 function search(query) {
+    if (query.length == 6){
+        query = query.slice(0, 2) + query.slice(3, query.length);
+    }
     if (courses[query])
     {
         selectNode(nodes[courses[query]],node[0][courses[query]]);
