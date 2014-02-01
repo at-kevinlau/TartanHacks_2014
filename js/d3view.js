@@ -27,17 +27,6 @@ outer.append('svg:defs').append('svg:marker')
     .attr('d', 'M0,-5L10,0L0,5')
     .attr('fill', '#000');
 
-outer.append('svg:defs').append('svg:marker')
-    .attr('id', 'start-arrow')
-    .attr('viewBox', '0 -5 10 10')
-    .attr('refX', 4)
-    .attr('markerWidth', 3)
-    .attr('markerHeight', 3)
-    .attr('orient', 'auto')
-  .append('svg:path')
-    .attr('d', 'M10,-5L0,0L10,5')
-    .attr('fill', '#000');
-
 var vis = outer
   .append('svg:g')
     .call(d3.behavior.zoom().on("zoom", rescale))
@@ -54,7 +43,7 @@ var force = d3.layout.force()
     .size([width, height])
     .nodes(initNodes)
     .links(initLinks)
-    .linkDistance(10)
+    .linkDistance(5)
     .linkStrength(1)
     .charge(-3000)
     .gravity(1)
@@ -76,12 +65,17 @@ var node = vis.selectAll(".node").data(nodes)
       function(d) {
         mousedown_node = d;
         if (mousedown_node == selected_node) selected_node = null;
-        else selected_node = mousedown_node;
+        else {
+          selected_node = mousedown_node;
+          d3.select(this).select("circle").transition()
+            .duration(750)
+            .attr("r", 20);
+        }
           node.classed("node_selected", function(d) {
             return d === selected_node; });
       })
 node.append("circle")
-    .attr("r", 5)
+    .attr("r", 10)
 node.append("text")
     .attr("dx", 12)
     .attr("dy", ".35em")
@@ -100,8 +94,8 @@ function tick() {
         dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
         normX = deltaX / dist,
         normY = deltaY / dist,
-        sourcePadding = 5,
-        targetPadding = 5,
+        sourcePadding = 0,
+        targetPadding = 10,
         sourceX = d.source.x + (sourcePadding * normX),
         sourceY = d.source.y + (sourcePadding * normY),
         targetX = d.target.x - (targetPadding * normX),
