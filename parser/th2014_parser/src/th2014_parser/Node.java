@@ -22,12 +22,12 @@ public class Node
 	@Expose
 	TreeType treeType;
 	// UUID postreqUUID;
+	private List<Node> prereqs;
 	UUID uuid;
 	@Expose
 	int nodeId; // corresponds to index in allNodes
 	@Expose
 	boolean isStarter = false;
-	private List<Node> prereqs;
 	@Expose
 	public List<Integer> prereqIndices;
 	@Expose
