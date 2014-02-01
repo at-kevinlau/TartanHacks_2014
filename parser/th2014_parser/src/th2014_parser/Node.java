@@ -27,6 +27,10 @@ public class Node
 	@Expose
 	boolean isStarter = false;
 	private List<Node> prereqs;
+	@Expose
+	public String description;
+	@Expose
+	public String title;
 
 	// make uuids zero-indexed
 	// array of pairs of edges
@@ -34,7 +38,8 @@ public class Node
 	private static int idNumCounter = 0;
 
 	private static HashMap<String, Integer> courseToIdMap = new HashMap<String, Integer>();
-	private static HashMap<String, UUID> courseToUuidMap = new HashMap<String, UUID>();
+	// private static HashMap<String, UUID> courseToUuidMap = new
+	// HashMap<String, UUID>();
 
 	public static File prereqFile;
 	public static OutputStreamWriter prereqFWriter;
@@ -77,11 +82,15 @@ public class Node
 		}
 	}
 
-	public Node(String data, UUID parentUUID, List<Node> children)
+	public Node(String cid, UUID parentUUID, List<Node> children)
 	{
-		if (data == null)
-			data = "";
-		this.courseId = data;
+		if (cid == null)
+			cid = "";
+		this.courseId = cid;
+
+		description = "";
+		title = "";
+
 		treeType = DEFAULT_TYPE;
 		this.prereqs = children;
 		if (prereqs.size() <= 0)
@@ -90,7 +99,7 @@ public class Node
 		}
 
 		// this.postreqUUID = parentUUID;
-		Integer id = courseToIdMap.get(data);
+		Integer id = courseToIdMap.get(cid);
 		if (id == null || this.courseId.length() <= 0)
 		{
 			this.nodeId = idNumCounter;
