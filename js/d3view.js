@@ -206,7 +206,7 @@ function selectNode(d, nodeDOMObject) {
                return -1000;
              }
            });
-force.start();
+    force.start();
     node.classed("nodeSelected", function(d) {
       return d === selectedNodeObj; });
   }
