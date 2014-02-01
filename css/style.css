@@ -17,7 +17,7 @@ body {
     pointer-events:none;
     text-align:center;
     background-color:#3498db;
-    opacity:0.25;
+    opacity:0.4;
 }
 
 #sidePanel {
@@ -32,6 +32,7 @@ body {
 #logo {
     height:10%;
     opacity:1;
+    padding: 15px 0;
 }
 
 #search {
@@ -87,4 +88,17 @@ body {
     height: 52px;
     cursor: pointer;
     outline:0;
+}
+
+#courseDescription {
+    position:relative;
+    top:52px;
+}
+
+#courseDescription.active{
+    display:block;
+}
+
+#courseDescription.unactive{
+    display:none;
 }
