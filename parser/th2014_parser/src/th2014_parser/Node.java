@@ -23,6 +23,7 @@ public class Node
 	TreeType treeType;
 	// UUID postreqUUID;
 	UUID uuid;
+	@Expose
 	int nodeId;
 	boolean isStarter = false;
 	private List<Node> prereqs;

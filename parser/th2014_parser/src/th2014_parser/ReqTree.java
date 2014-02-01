@@ -109,7 +109,7 @@ public class ReqTree implements Serializable
 				}
 			}
 		}
-		if (parenCount == 0)
+		if (parenCount == 0 && currString.length() > 0)
 		{
 			Node n = new Node(currString, root.uuid, new ArrayList<Node>());
 			children.add(n);
