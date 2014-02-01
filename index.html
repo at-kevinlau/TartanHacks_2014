@@ -11,9 +11,9 @@
   <div id="sidePanelBackground">
   </div>
   <div id="sidePanel">
-      <img class="opButton" src="img/save.png"/>
+      <img class="opButton" style="pointer-events:all" src="img/save.png" onclick="saveCookie();"/>
       <img id="logo" src="img/logo.png"/>
-      <img class="opButton" src="img/trash.png"/>
+      <img class="opButton" src="img/trash.png" style="pointer-events:all" onclick="deleteCookie();"/>
     <li class="search">
       <form>
         <input type="text" id="search_text" class="textbox" onkeydown="return searchBox(event)"

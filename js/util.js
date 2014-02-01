@@ -46,7 +46,10 @@ function describe(courseId){
     }
 }
 
+classSet = {}
+
 function takeClasses(text) {
+    if ((!text) || (text === "")) return
     var courseArray = text.match(/\d\d-\d\d\d/g);
     if (courseArray) {
         courseArray = courseArray.concat(text.match(/\d\d\d\d\d/g));
@@ -58,6 +61,7 @@ function takeClasses(text) {
         courseArray[i] = courseArray[i].replace('-', '');
     }
     courseArray.forEach(function(courseId){
+        classSet[courseId] = "";
         node[0][courses[courseId]].classList.add("nodeTaken");
     });
 }
@@ -73,3 +77,21 @@ function uploadBox(){
        return false;
     }
 }
+
+function saveCookie() {
+    var currentClasses = "";
+    Object.keys(classSet).forEach(function(s){
+        currentClasses += s + ", "
+    })
+    console.log(currentClasses)
+    window.localStorage["courses"] = currentClasses;
+}
+
+function deleteCookie() {
+    classSet = {}
+    delete window.localStorage["courses"];
+    node.classed("nodeTaken", false);
+}
+
+
+takeClasses(window.localStorage["courses"]);
