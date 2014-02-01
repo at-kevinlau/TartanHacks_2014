@@ -221,3 +221,7 @@ function deselect() {
   link.classed("postreqLink", false);
   tick();
 }
+
+function searchBox(){
+  search(document.getElementById("search_text").value);
+}
