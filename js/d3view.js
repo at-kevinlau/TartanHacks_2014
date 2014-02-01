@@ -147,6 +147,7 @@ function selectNode(d, nodeDOMObject) {
   else {
     if (selectedNodeObj)
       deselect();
+      
     selectedNodeObj = d;
     selectedNodeDOMObject = nodeDOMObject;
     d3.select(nodeDOMObject).select("circle").transition()
@@ -158,6 +159,9 @@ function selectNode(d, nodeDOMObject) {
     	.style("font-size",SELECTED_FONT_SIZE)
     	.style("fill","#222")
     	.style("stroke", "#222");
+        
+    node.classed("lowOpacity", true);
+    link.classed("lowOpacity", true);
     d.prereqIndices.forEach(function(n){
       node[0][n].classList.add("prereqNode");
       if (nodes[n].courseId.length <= 0) {
@@ -223,9 +227,11 @@ function deselect() {
     return d === selectedNodeObj; });
   selectedNodeObj = null;
   selectedNodeDOMObject = null;
+  node.classed("lowOpacity", false);
   node.classed("nodeSelected", false);
   node.classed("prereqNode", false);
   node.classed("postreqNode", false);
+  link.classed("lowOpacity", false);
   link.classed("prereqColorLink", false);
   link.classed("postreqColorLink", false);
   link.classed("prereqLink", false);
