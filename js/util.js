@@ -2,7 +2,10 @@ var courses = new Array();
 for (var i = 0; i < nodes.length; i++)
 {
     var c = nodes[i];
-    courses[c.courseId] = c.nodeId;
+    if (c.courseId.length == 5)
+    {
+        courses[c.courseId] = c.nodeId;
+    }
 }
 
 function search(query) {
