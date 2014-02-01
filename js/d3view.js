@@ -44,26 +44,37 @@ var force = d3.layout.force()
 
 // get layout properties
 var nodes = force.nodes(),
-    links = force.links(),
-    node = vis.selectAll(".node"),
-    link = vis.selectAll(".link");
+    links = force.links();
 
-link = link.data(links);
-link.enter().insert("line", ".node")
+var link = vis.selectAll(".link").data(links)
+    .enter().insert("line", ".node")
     .attr("class", "link");
 
-node = node.data(nodes);
-node.enter().insert("circle")
+var node = vis.selectAll(".node").data(nodes)
+    .enter().append("g")/*insert("circle")
+    .attr("r", 5)*/
     .attr("class", "node")
-    .attr("r", 5)
     .on("click", 
       function(d) {
         mousedown_node = d;
         if (mousedown_node == selected_node) selected_node = null;
         else selected_node = mousedown_node;
-          node
-    .classed("node_selected", function(d) { return d === selected_node; });
+          node.classed("node_selected", function(d) {
+            return d === selected_node; });
       })
+node.append("circle")
+    .attr("r", 5)
+node.append("text")
+    .attr("dx", 12)
+    .attr("dy", ".35em")
+    .text("TEST")
+
+vis.append('svg:text')
+      .attr('x', 0)
+      .attr('y', 4)
+      .attr('class', 'id')
+      .text("fasdfasd");
+
 
 force.start();
 
@@ -73,8 +84,10 @@ function tick() {
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
 
-  node.attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; });
+  node.attr("transform",
+      function(d,i) {"translate(" + d.x + ", " + d.y + ")"});
+  /*.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });*/
 }
 
 // pan and scale
