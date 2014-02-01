@@ -48,13 +48,16 @@ function describe(courseId){
 
 function takeClasses(text) {
     var courseArray = text.match(/\d\d-\d\d\d/g);
-    courseArray.concat(text.match(/\d\d\d\d\d/g));
+    if (courseArray) {
+        courseArray = courseArray.concat(text.match(/\d\d\d\d\d/g));
+    } else {
+        courseArray = text.match(/\d\d\d\d\d/g);
+    }
     if (!courseArray) return;
     for (var i=0; i<courseArray.length; i++){
         courseArray[i] = courseArray[i].replace('-', '');
     }
     courseArray.forEach(function(courseId){
-        console.log(courseId)
         node[0][courses[courseId]].classList.add("nodeTaken");
     });
 }
