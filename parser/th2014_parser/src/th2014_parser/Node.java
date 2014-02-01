@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class Node
 	// UUID postreqUUID;
 	UUID uuid;
 	int nodeId;
+	boolean isStarter = false;
 	private List<Node> prereqs;
 
 	// make uuids zero-indexed
@@ -36,8 +38,10 @@ public class Node
 	public static File prereqFile;
 	public static OutputStreamWriter prereqFWriter;
 	public static FileOutputStream prereqFOut;
+	public static ArrayList<Node> allNodes;
 	static
 	{
+		allNodes = new ArrayList<Node>();
 		try
 		{
 			prereqFile = new File("../../courses.json");
@@ -53,6 +57,21 @@ public class Node
 		}
 	}
 
+	public static void writeAllNodesToFile()
+	{
+		for (Node n : allNodes)
+		{
+			try
+			{
+				prereqFWriter.append(n.generateJSON() + ",");
+			} catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public Node(String data, UUID parentUUID, List<Node> children)
 	{
 		if (data == null)
@@ -60,6 +79,10 @@ public class Node
 		this.courseId = data;
 		treeType = DEFAULT_TYPE;
 		this.prereqs = children;
+		if (prereqs.size() <= 0)
+		{
+			isStarter = true;
+		}
 
 		// this.postreqUUID = parentUUID;
 		Integer id = courseToIdMap.get(data);
@@ -71,14 +94,7 @@ public class Node
 			{
 				courseToIdMap.put(this.courseId, this.nodeId);
 			}
-			try
-			{
-				prereqFWriter.append(generateJSON()+",");
-			} catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			allNodes.add(this);
 		} else
 		{
 			// System.out.println("Found old id. id=" + id + ", courseId=" +

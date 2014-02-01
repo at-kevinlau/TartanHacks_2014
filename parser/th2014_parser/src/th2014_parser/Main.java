@@ -167,6 +167,7 @@ public class Main
 				// e.printStackTrace();
 			}
 		}
+		Node.writeAllNodesToFile();
 		Node.prereqFWriter.append("]");
 
 		Gson gson = new Gson();
