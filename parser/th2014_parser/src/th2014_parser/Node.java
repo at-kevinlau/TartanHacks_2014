@@ -23,8 +23,8 @@ public class Node
 	TreeType treeType;
 	// UUID postreqUUID;
 	UUID uuid;
-	@Expose
 	int nodeId;
+	@Expose
 	boolean isStarter = false;
 	private List<Node> prereqs;
 
@@ -62,6 +62,10 @@ public class Node
 	{
 		for (Node n : allNodes)
 		{
+			if (n.prereqs.size() <= 0)
+			{
+				n.isStarter = true;
+			}
 			try
 			{
 				prereqFWriter.append(n.generateJSON() + ",");
