@@ -150,17 +150,17 @@ public class Main
 							String pr = getReqString(coursePage, matchPrereq);
 							System.out.println(linkText + " prereqs: " + pr);
 							prereqFWriter.append(ReqTree.treeFromReqString(
-									linkText, pr, null).generateJSON());
+									linkText, pr, null).generateJSON()+",");
 
 							String cr = getReqString(coursePage, matchCoreq);
 							System.out.println(linkText + " coreqs: " + cr);
 							coreqFWriter.append(ReqTree.treeFromReqString(
-									linkText, cr, null).generateJSON());
+									linkText, cr, null).generateJSON()+",");
 
 						} catch (IOException e)
 						{
 							System.out
-									.println("Failed to load course page:\ncoursePageLink");
+									.println("Failed to load course page:\n" + coursePageLink);
 							continue;
 						}
 
