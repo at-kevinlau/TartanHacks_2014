@@ -8,7 +8,6 @@ var WIDTH = window.innerWidth,
     SELECTED_DX = 24,
     DESELECTED_DX = 12,
     SELECTED_FONT_SIZE = "18px",
-    SELECTED_MED_FONT_SIZE = "10px",
     DESELECTED_FONT_SIZE = "5px",
     DESELECTED_TEXT_Y = ".35em",
     fill = d3.scale.category20();
@@ -123,6 +122,8 @@ function tick() {
       
   node.attr("transform",
       function(d,i) {return "translate(" + d.x + ", " + d.y + ")"});
+  
+//  console.log(d3.select(node[0]));
       
 }
 
@@ -169,23 +170,9 @@ function selectNode(d, nodeDOMObject) {
     link.classed("lowOpacity", true);
     d.prereqIndices.forEach(function(n){
       node[0][n].classList.add("prereqNode");
-      d3.select(node[0][n]).select("circle").transition()
-        .duration(750)
-        .attr("r", SELECTED_RADIUS * .6);
-      d3.select(node[0][n]).select("text").transition()
-    	.duration(750)
-    	.attr("dx",-.5*SELECTED_RADIUS)
-    	.style("font-size",SELECTED_MED_FONT_SIZE);
       if (nodes[n].courseId.length <= 0) {
         nodes[n].prereqIndices.forEach(function(z){
           node[0][z].classList.add("prereqNode");
-        d3.select(node[0][z]).select("circle").transition()
-          .duration(750)
-          .attr("r", SELECTED_RADIUS * .6);
-        d3.select(node[0][z]).select("text").transition()
-      	.duration(750)
-    	  .attr("dx",-.5*SELECTED_RADIUS)
-    	  .style("font-size",SELECTED_MED_FONT_SIZE);
         });
       }
     });
@@ -200,23 +187,9 @@ function selectNode(d, nodeDOMObject) {
     });
     d.postreqIndices.forEach(function(n){
       node[0][n].classList.add("postreqNode");
-      d3.select(node[0][n]).select("circle").transition()
-        .duration(750)
-        .attr("r", SELECTED_RADIUS * .6);
-      d3.select(node[0][n]).select("text").transition()
-    	.duration(750)
-    	.attr("dx",-.5*SELECTED_RADIUS)
-    	.style("font-size",SELECTED_MED_FONT_SIZE);
       if (nodes[n].courseId.length <= 0) {
         nodes[n].postreqIndices.forEach(function(z){
           node[0][z].classList.add("postreqNode");
-        d3.select(node[0][z]).select("circle").transition()
-          .duration(750)
-          .attr("r", SELECTED_RADIUS * .6);
-        d3.select(node[0][z]).select("text").transition()
-    	  .duration(750)
-    	  .attr("dx",-.5*SELECTED_RADIUS)
-    	  .style("font-size",SELECTED_MED_FONT_SIZE);
         });
       }
     });
@@ -231,9 +204,9 @@ function selectNode(d, nodeDOMObject) {
     });
     force.charge(function conditionalforce (d) {
              if (node[0][d.nodeId].classList.contains("prereqNode") || node[0][d.nodeId].classList.contains("postreqNode") ) {
-               return -3000;
-             } else {
                return -1000;
+             } else {
+               return -3000;
              }
            });
     force.start();
@@ -253,16 +226,6 @@ function deselect() {
     .style("font-size",DESELECTED_FONT_SIZE)
     .style("fill", "#FFF")
     .style("stroke","none");
-  d3.selectAll("circle").transition()
-    .duration(750)
-    .attr("r", DESELECTED_RADIUS);
-  d3.selectAll("text").transition()
-    .duration(750)
-    .attr("dx",-.75*DESELECTED_RADIUS)
-    .style("font-size",DESELECTED_FONT_SIZE)
-    .style("fill", "#FFF")
-    .style("stroke","none");
-          
   node.classed("nodeSelected", function(d) {
     return d === selectedNodeObj; });
   selectedNodeObj = null;

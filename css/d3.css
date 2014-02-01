@@ -1,5 +1,6 @@
 text{
   fill: #FFF;
+  stroke:none;
 }
 
 .node {
@@ -13,8 +14,16 @@ text{
 
 .nodeSelected {
   fill: #ff7f0e;
-  stroke: #ff7f0e;
   opacity: 1;
+  -webkit-transition: fill 750ms linear;
+  -moz-transition: fill 750ms linear;
+  -o-transition: fill 750ms linear;
+  transition: fill 750ms linear;
+}
+
+.nodeTaken {
+  stroke: #0F0 !important;
+  stroke-width:3;
   -webkit-transition: fill 750ms linear;
   -moz-transition: fill 750ms linear;
   -o-transition: fill 750ms linear;

@@ -45,3 +45,11 @@ function describe(courseId){
         div.setAttribute("class","active");
     }
 }
+
+function takeClasses() {
+    var example=["18213","18100","18220"]
+    example.forEach(function(courseId){
+        node[0][courses[courseId]].classList.add("nodeTaken");
+    });
+}
+takeClasses();
