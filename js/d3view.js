@@ -104,8 +104,6 @@ function tick() {
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; })
-      .transition()
-      .duration(750)
       .attr('d', function(d) {
         var deltaX = d.target.x - d.source.x,
         deltaY = d.target.y - d.source.y,
