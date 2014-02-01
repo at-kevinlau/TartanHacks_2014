@@ -192,6 +192,15 @@ function selectNode(d, nodeDOMObject) {
         });
       }
     });
+    /*
+    force.charge(function (d) {
+             if (d.classList.indexOf("prereqNode") !== -1) {
+               return -2000;
+             } else {
+               return -1000;
+             }
+           });
+force.start();*/
     node.classed("nodeSelected", function(d) {
       return d === selectedNodeObj; });
   }
