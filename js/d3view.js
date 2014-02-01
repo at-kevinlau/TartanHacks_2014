@@ -4,10 +4,10 @@ var initLinks = [{"source":1,"target":2},{"source":3,"target":4},{"source":3,"ta
 var WIDTH = window.innerWidth,
     HEIGHT = window.innerHeight,
     DESELECTED_RADIUS = 10,
-    SELECTED_RADIUS = 20,
+    SELECTED_RADIUS = 30,
     SELECTED_DX = 24,
     DESELECTED_DX = 12,
-    SELECTED_FONT_SIZE = "24px",
+    SELECTED_FONT_SIZE = "18px",
     DESELECTED_FONT_SIZE = "5px",
     DESELECTED_TEXT_Y = ".35em",
     fill = d3.scale.category20();
@@ -87,7 +87,7 @@ var node = vis.selectAll(".node").data(nodes)
 node.append("circle")
     .attr("r", DESELECTED_RADIUS)
 node.append("text")
-    .attr("dx", 12)
+    .attr("dx", -.75*DESELECTED_RADIUS)
     .attr("dy", ".35em")
     .text(function(d) { return d.courseId; })
 
@@ -147,8 +147,10 @@ function selectNode(d) {
       .attr("r", SELECTED_RADIUS);
     d3.select(this).select("text").transition()
     	.duration(750)
-    	.attr("dx",SELECTED_DX)
-    	.style("font-size",SELECTED_FONT_SIZE);
+    	.attr("dx",-.8*SELECTED_RADIUS)
+    	.style("font-size",SELECTED_FONT_SIZE)
+    	.style("fill","#000")
+    	.style("stroke", "#000");
     node.classed("node_selected", function(d) {
       return d === selectedNodeObj; });
   }
@@ -160,8 +162,9 @@ function deselect() {
     .attr("r", DESELECTED_RADIUS);
   d3.select(selectedNodeDOMObject).select("text").transition()
     .duration(750)
-    .attr("dx",DESELECTED_DX)
-    .style("font-size",DESELECTED_FONT_SIZE);
+    .attr("dx",-.75*DESELECTED_RADIUS)
+    .style("font-size",DESELECTED_FONT_SIZE)
+    .style("stroke","none");
   node.classed("node_selected", function(d) {
     return d === selectedNodeObj; });
   selectedNodeObj = null;
