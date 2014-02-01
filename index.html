@@ -6,36 +6,21 @@
 <!-- <script src="d3.v2.min.js"></script> -->
 <script src="http://d3js.org/d3.v2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="css/d3.css">
-<link href="flatnav.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-	<ul class="nav" style="position:relative; left: 25%;">
-		<li id="settings">
-			<a href="#"><img src="settings.png" /></a>
-		</li>
-		<li>
-			<a href="#">Application</a>
-		</li>
-		<li>
-			<a href="#">Board</a>
-		</li>
-		<li id="search">
-			<form action="" method="get">
-				<input type="text" name="search_text" id="search_text" placeholder="Search"/>
-				<input type="button" name="search_button" id="search_button"></a>
-			</form>
-		</li>
-		<li id="options">
-			<a href="#">Options</a>
-			<ul class="subnav">
-				<li><a href="#">Settings</a></li>
-				<li><a href="#">Application</a></li>
-				<li><a href="#">Board</a></li>
-				<li><a href="#">Options</a></li>
-			</ul>
-		</li>
-	</ul>
-
+  <div id="sidePanelBackground">
+  </div>
+  <div id="sidePanel">
+    <img id="logo" src="img/logo.png"/>
+    <li id="search">
+      <form>
+        <input type="text" name="search_text" id="search_text" onkeydown="searchBox(event)"
+        placeholder="Search Course #" maxlength="6" autofocus>
+        <input type="button" name="search_button" id="search_button" onclick="searchButton(event)">
+      </form>
+    </li>
+  </div>
   <div id="chart">
   </div>
 <script src="js/d3view.js"></script>
