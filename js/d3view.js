@@ -92,7 +92,6 @@ node.append("text")
     .text(function(d) { return d.courseId; })
 
 force.start();
-
 function tick() {
   link.attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
@@ -104,7 +103,8 @@ function tick() {
         dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
         normX = deltaX / dist,
         normY = deltaY / dist,
-        sourcePadding = DESELECTED_RADIUS,
+        sourcePadding = (this.getAttribute("class") == "link prereqLink") ? 
+            (SELECTED_RADIUS + 5):(DESELECTED_RADIUS + 5),
         targetPadding = 0,
         sourceX = d.source.x + (sourcePadding * normX),
         sourceY = d.source.y + (sourcePadding * normY),
@@ -154,12 +154,19 @@ function selectNode(d, nodeDOMObject) {
     d.prereqIndices.forEach(function(n){
       node[0][n].classList.add("prereqNode");
     });
+    d.prereqLinks.forEach(function(n){
+      link[0][n].classList.add("prereqLink");
+    });
     d.postreqIndices.forEach(function(n){
       node[0][n].classList.add("postreqNode");
+    });
+    d.postreqLinks.forEach(function(n){
+      link[0][n].classList.add("postreqLink");
     });
     node.classed("nodeSelected", function(d) {
       return d === selectedNodeObj; });
   }
+  tick();
 }
 
 function deselect() {
@@ -179,4 +186,7 @@ function deselect() {
   node.classed("nodeSelected", false);
   node.classed("prereqNode", false);
   node.classed("postreqNode", false);
+  link.classed("prereqLink", false);
+  link.classed("postreqLink", false);
+  tick();
 }
