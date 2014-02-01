@@ -44,7 +44,7 @@ var vis = outer
  	//special transform...
  	.attr("transform", "translate(" + WIDTH / 2 + "," + HEIGHT / 2 + ")")
     .call(d3.behavior.zoom()
-    .scaleExtent([.5,10])	//limits zooming
+    .scaleExtent([.5,4])	//limits zooming
     .on("zoom", rescale))
     .on("dblclick.zoom", null)
   	.append('svg:g');
