@@ -17,7 +17,7 @@ body {
     pointer-events:none;
     text-align:center;
     background-color:#3498db;
-    opacity:0.1;
+    opacity:0.25;
 }
 
 #sidePanel {
@@ -54,7 +54,7 @@ body {
     margin-right: 0;
     color: white;
     outline: none;
-    background: #1f7f5c;
+    background: #2980b9;
     float: left;
     box-sizing: border-box;
     transition: all 0.15s;
@@ -72,14 +72,14 @@ body {
     color: #CCC;
 }
 #search_text:focus {
-    background: rgb(64, 151, 119);
+    background: #3498db;
 }
 
 #search_button {
     position:absolute;
     right:0;
     border: 0 none;
-    background: #1f7f5c url(../img/search.png) center no-repeat;
+    background: #2980b9 url(../img/search.png) center no-repeat;
     width: 60px; 
     float: left;
     padding: 0;
