@@ -102,3 +102,7 @@ body {
 #courseDescription.unactive{
     display:none;
 }
+
+#courseDescription p{
+    margin:4px;
+}
