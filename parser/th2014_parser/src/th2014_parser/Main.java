@@ -14,7 +14,7 @@ public class Main
 	//@formatter:off
 	final static String socURLPrefix = "https://enr-apps.as.cmu.edu/open/SOC/SOCServlet?Formname=GET_CLASSES&SUBMIT=Retrieve+Schedule&SEMESTER=S14&GRAD_UNDER=All&MINI=NO&DEPT=";
 	final static String[] socURLStrings = {
-		/*"AFR",
+		"AFR",
 		"ARC",
 		"ART",
 		"BXA",
@@ -37,8 +37,8 @@ public class Main
 		"ISH",
 		"HSS",
 		"DRA",
-		"ECO",*/
-		"ECE"/*,
+		"ECO",
+		"ECE",
 		"IAE",
 		"EPP",
 		"ENG",
@@ -76,7 +76,7 @@ public class Main
 		"SE+",
 		"STA",
 		"STU",
-		"IA+"*/
+		"IA+"
 	};
 	//@formatter:on
 	final static Pattern matchCourseNumber = Pattern.compile("^[0-9]{5,5}$");
@@ -124,6 +124,11 @@ public class Main
 				// TODO: hacky way to get this section
 				Elements infoSection = deptPage.getElementsByAttributeValue(
 						"cellpadding", "5");
+				// don't crash on missed page
+				if (infoSection.size() <= 0)
+				{
+					continue;
+				}
 				Elements links = infoSection.get(0).getElementsByTag("a");
 				for (Element link : links)
 				{
@@ -157,7 +162,7 @@ public class Main
 						try
 						{
 							// don't do too many requests at once
-							Thread.sleep(100);
+							Thread.sleep(200);
 						} catch (InterruptedException e)
 						{
 							// TODO Auto-generated catch block
