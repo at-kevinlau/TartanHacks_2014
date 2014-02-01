@@ -48,7 +48,24 @@ var nodes = force.nodes(),
     node = vis.selectAll(".node"),
     link = vis.selectAll(".link");
 
-redraw();
+link = link.data(links);
+link.enter().insert("line", ".node")
+    .attr("class", "link");
+
+node = node.data(nodes);
+node.enter().insert("circle")
+    .attr("class", "node")
+    .attr("r", 5)
+    .on("click", 
+      function(d) {
+        mousedown_node = d;
+        if (mousedown_node == selected_node) selected_node = null;
+        else selected_node = mousedown_node;
+          node
+    .classed("node_selected", function(d) { return d === selected_node; });
+      })
+
+force.start();
 
 function tick() {
   link.attr("x1", function(d) { return d.source.x; })
@@ -60,7 +77,7 @@ function tick() {
       .attr("cy", function(d) { return d.y; });
 }
 
-// rescale g
+// pan and scale
 function rescale() {
   trans=d3.event.translate;
   scale=d3.event.scale;
@@ -72,56 +89,4 @@ function rescale() {
   vis.attr("transform",
       "translate(" + trans + ")"
       + " scale(" + scale + ")");
-}
-
-// redraw force layout
-function redraw() {
-
-  link = link.data(links);
-
-  link.enter().insert("line", ".node")
-      .attr("class", "link");
-
-  link.exit().remove();
-
-  node = node.data(nodes);
-
-  node.enter().insert("circle")
-      .attr("class", "node")
-      .attr("r", 5)
-      .on("click", 
-        function(d) {
-          mousedown_node = d;
-          if (mousedown_node == selected_node) selected_node = null;
-          else selected_node = mousedown_node;
-          redraw();
-        })
-    .transition()
-      .duration(750)
-      .ease("elastic")
-      .attr("r", 6.5);
-
-  node.exit().transition()
-      .attr("r", 0)
-    .remove();
-
-  node
-    .classed("node_selected", function(d) { return d === selected_node; });
-
-  if (d3.event) {
-    // prevent browser's default behavior
-    d3.event.preventDefault();
-  }
-
-  force.start();
-
-}
-
-function spliceLinksForNode(node) {
-  toSplice = links.filter(
-    function(l) { 
-      return (l.source === node) || (l.target === node); });
-  toSplice.map(
-    function(l) {
-      links.splice(links.indexOf(l), 1); });
 }
