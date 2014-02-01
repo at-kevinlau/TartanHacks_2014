@@ -52,7 +52,7 @@ function takeClasses(text) {
     if ((!text) || (text === "")) return
     var courseArray = text.match(/\d\d-\d\d\d/g);
     if (courseArray) {
-        courseArray = courseArray.concat(text.match(/\d\d\d\d\d/g));
+        courseArray = courseArray.concat(text.match(/\d\d\d\d\d/g) || []);
     } else {
         courseArray = text.match(/\d\d\d\d\d/g);
     }
@@ -62,7 +62,8 @@ function takeClasses(text) {
     }
     courseArray.forEach(function(courseId){
         classSet[courseId] = "";
-        node[0][courses[courseId]].classList.add("nodeTaken");
+        if(courses[courseId])
+            node[0][courses[courseId]].classList.add("nodeTaken");
     });
 }
 
