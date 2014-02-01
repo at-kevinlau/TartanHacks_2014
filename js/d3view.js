@@ -1,15 +1,32 @@
 var initNodes = [{
   x: 100,
   y: 200,
-  fixed: true
+  fixed: true,
+  courseId: "15112"
 },{
   x: 300,
   y: 200,
-  fixed: true
+  courseId: "15122"
+},{
+  x: 50,
+  y: 200,
+  courseId: "15213"
+},{
+  x: 50,
+  y: 400,
+  courseId: "15410"
 }]
 
-var width = 960,
-    height = 500,
+var initLinks = [{
+  source:0, target:1
+},{
+  source:1, target:2
+},{
+  source:2, target:3
+}]
+
+var width = window.innerWidth,
+    height = window.innerHeight,
     fill = d3.scale.category20();
 
 // mouse event vars
@@ -36,9 +53,11 @@ vis.append('svg:rect')
 // init force layout
 var force = d3.layout.force()
     .size([width, height])
-    .nodes(initNodes) // initialize with a single node
-    .links([{source:0, target:1}])
-    .charge(0)
+    .nodes(initNodes)
+    .links(initLinks)
+    .linkDistance(10)
+    .linkStrength(1)
+    .charge(-3000)
     .gravity(0)
     .on("tick", tick);
 
@@ -51,8 +70,7 @@ var link = vis.selectAll(".link").data(links)
     .attr("class", "link");
 
 var node = vis.selectAll(".node").data(nodes)
-    .enter().append("g")/*insert("circle")
-    .attr("r", 5)*/
+    .enter().append("g")
     .attr("class", "node")
     .on("click", 
       function(d) {
@@ -67,14 +85,7 @@ node.append("circle")
 node.append("text")
     .attr("dx", 12)
     .attr("dy", ".35em")
-    .text("TEST")
-
-vis.append('svg:text')
-      .attr('x', 0)
-      .attr('y', 4)
-      .attr('class', 'id')
-      .text("fasdfasd");
-
+    .text(function(d) { return d.courseId; })
 
 force.start();
 
@@ -83,7 +94,7 @@ function tick() {
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
-
+      
   node.attr("transform",
       function(d,i) {return "translate(" + d.x + ", " + d.y + ")"});
 }
