@@ -5,40 +5,63 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * 
- * 
- */
-
 public class PrereqTree implements Serializable
 {
 	private static final long serialVersionUID = 6062494209339114482L;
 
-	public Node root;
-
-	public PrereqTree(String rootData)
+	enum TreeType
 	{
-		root = new Node(rootData, null, new ArrayList<Node>(), UUID
-				.randomUUID().toString());
-	}
+		OR, AND
+	};
 
-	class Node
+	public static Node treeFromPrereqString(String courseNum, String prereqStr)
 	{
-		String data;
-		Node parent;
-		List<Node> children;
-		String uuidString;
+		TreeType rootType = TreeType.OR;
+		ArrayList<Node> children = new ArrayList<Node>();
+		Node root = new Node(courseNum, null, children, UUID.randomUUID()
+				.toString());
 
-		public Node(String data, Node parent, List<Node> children,
-				String uuidString)
+		int parenCount = 0;
+		String currString = "";
+		ArrayList<Node> grandchildren = new ArrayList<Node>();
+		for (char c : prereqStr.toCharArray())
 		{
-
+			if (parenCount < 0)
+			{
+				return null;
+			} else if (parenCount == 0)
+			{
+				switch (c)
+				{
+				case ' ':
+					// this hopes that there aren't mixed 'and'/'or's without
+					// parens
+					if (currString.equals("or"))
+					{
+						rootType = TreeType.OR;
+					} else if (currString.equals("and"))
+					{
+						rootType = TreeType.AND;
+					} else
+					{
+						children.add(new Node(currString, root,
+								new ArrayList<Node>(), UUID.randomUUID()
+										.toString()));
+					}
+					currString = "";
+					break;
+				case '(':
+					parenCount++;
+					break;
+				}
+			} else
+			{
+				// parenCount > 0
+				currString += c;
+			}
 		}
-	}
 
-	public static PrereqTree treeFromPrereqString(String prereqStr)
-	{
-
-		return null;
+		root.treeType = rootType;
+		return root;
 	}
 }
