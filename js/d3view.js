@@ -83,7 +83,7 @@ var link = vis.selectAll(".link").data(links)
 var node = vis.selectAll(".node").data(nodes)
     .enter().append("g")
     .attr("class", "node")
-    .on("click", function(d){return selectNode(d,this);});
+    .on("mousedown", function(d){return selectNode(d,this);});
 node.append("circle")
     .attr("r", DESELECTED_RADIUS)
 node.append("text")
@@ -143,8 +143,11 @@ function rescale() {
 function selectNode(d, nodeDOMObject) {
   if (d == selectedNodeObj) {
     deselect();
+    
+  document.getElementById("courseDescription").setAttribute("class","unactive");
   }
   else {
+    describe(d.courseId);
     if (selectedNodeObj)
       deselect();
       
