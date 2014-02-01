@@ -53,6 +53,9 @@ public class PrereqTree implements Serializable
 				case '(':
 					parenCount++;
 					break;
+				case ')':
+					parenCount--;
+					break;
 				}
 			} else
 			{
