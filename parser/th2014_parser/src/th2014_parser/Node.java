@@ -13,9 +13,9 @@ public class Node
 	String data;
 	// All children of a node must have fulfilled prereqs
 	TreeType treeType;
-	UUID parentUUID;
+	//UUID postreqUUID;
 	UUID uuid;
-	List<Node> children;
+	List<Node> prereqs;
 
 	public static final TreeType DEFAULT_TYPE = TreeType.OR;
 
@@ -27,7 +27,7 @@ public class Node
 			data = "";
 		this.data = data;
 		treeType = DEFAULT_TYPE;
-		this.parentUUID = parentUUID;
+		//this.postreqUUID = parentUUID;
 
 		UUID uuid = courseToUuidMap.get(data);
 		if (uuid == null)
@@ -37,7 +37,7 @@ public class Node
 		{
 			this.uuid = uuid;
 		}
-		this.children = children;
+		this.prereqs = children;
 	}
 
 	public String generateJSON()
@@ -55,7 +55,7 @@ public class Node
 		if (data != null && data.length() > 0)
 		{
 			resultString += "data=" + data;
-			if (children.size() > 0)
+			if (prereqs.size() > 0)
 			{
 				resultString += ", ";
 			}
@@ -65,14 +65,14 @@ public class Node
 		 * resultString += "parentUUID=" + parentUUID + ", "; resultString +=
 		 * "uuid=" + uuid + ", ";
 		 */
-		if (children.size() > 0)
+		if (prereqs.size() > 0)
 		{
 			resultString += "c={";
-			for (int i = 0; i < children.size(); i++)
+			for (int i = 0; i < prereqs.size(); i++)
 			{
-				Node n = children.get(i);
+				Node n = prereqs.get(i);
 				resultString += n.toString();
-				if (i < children.size() - 1)
+				if (i < prereqs.size() - 1)
 				{
 					resultString += ",";
 				}
