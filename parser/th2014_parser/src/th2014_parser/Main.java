@@ -14,7 +14,7 @@ public class Main
 	//@formatter:off
 	final static String socURLPrefix = "https://enr-apps.as.cmu.edu/open/SOC/SOCServlet?Formname=GET_CLASSES&SUBMIT=Retrieve+Schedule&SEMESTER=S14&GRAD_UNDER=All&MINI=NO&DEPT=";
 	final static String[] socURLStrings = {
-		"AFR",
+		/*"AFR",
 		"ARC",
 		"ART",
 		"BXA",
@@ -30,15 +30,15 @@ public class Main
 		"CMY",
 		"CEE",
 		"CB+",
-		"CS+",
+		*/"CS+",/*
 		"BCA",
 		"CRM",
 		"DES",
 		"ISH",
 		"HSS",
 		"DRA",
-		"ECO",
-		"ECE",
+		"ECO",*/
+		"ECE"/*,
 		"IAE",
 		"EPP",
 		"ENG",
@@ -76,7 +76,7 @@ public class Main
 		"SE+",
 		"STA",
 		"STU",
-		"IA+"
+		"IA+"*/
 	};
 	//@formatter:on
 	final static Pattern matchCourseNumber = Pattern.compile("^[0-9]{5,5}$");
